@@ -6,10 +6,24 @@ import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/Scenes/Login/LoginViewModel.dart';
 import 'package:flutter/material.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget{
   final LoginViewModel viewModel;
-
   const LoginView({super.key, required this.viewModel});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> implements ActionButtonDelegate {
+  late ActionInput username;
+  late ActionInput password;
+
+  @override
+  void initState() {
+    super.initState();
+    username = buildActionInputUsername();
+    password = buildActionInputPassword();
+  }
 
   @override
     Widget build(BuildContext context) {
@@ -26,19 +40,31 @@ class LoginView extends StatelessWidget {
               ),
 
               const SizedBox(height: 24), // espaço vertical
-              buildActionInputUsername(),
-
+              username,
               const SizedBox(height: 16),
-              buildActionInputPassword(),
-
+              password,
               const SizedBox(height: 16),
 
-              buildActionButton(),
+              buildActionButton(delegate: this),
             ],
           ),
         ),
       );
     }
+
+  @override
+  void onClick(ActionButtonViewModel viewModel) {
+    String user = '';
+    String pass = '';
+
+    widget.viewModel.performLogin(
+      user,
+      pass,
+      onSuccess: (name, address) {
+        widget.viewModel.presentHome(name, address);
+      },
+    );
+  }
 }
 
 ActionInput buildActionInputUsername() {
@@ -62,10 +88,7 @@ ActionInput buildActionInputPassword() {
   return ActionInput.instantiate(viewModel: viewModel);
 }
 
-class MaxLengthEnforcement {
-}
-
-ActionButton buildActionButton() {
+ActionButton buildActionButton({required ActionButtonDelegate delegate}) {
   final viewModel = ActionButtonViewModel(
       size: ActionButtonSize.large,
       style: ActionButtonStyle.secondary,
@@ -74,6 +97,7 @@ ActionButton buildActionButton() {
   );
 
   return ActionButton.instantiate(
-    viewModel: viewModel
+    viewModel: viewModel,
+    delegate: delegate,
   );
 }

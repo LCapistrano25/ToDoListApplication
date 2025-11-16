@@ -7,17 +7,15 @@ abstract class ActionInputDelegate {
   void onClick(ActionInputViewModel viewModel);
 }
 
-class ActionInput extends StatelessWidget {
+class ActionInput extends StatefulWidget {
   final ActionInputViewModel viewModel;
   final ActionInputDelegate? delegate;
 
-  // Construtor privado, chamado pelo 'instantiate'
   const ActionInput._({
     required this.viewModel,
     this.delegate,
   });
-  
-  // Método estático para criar a instância do widget
+
   static ActionInput instantiate({
     required ActionInputViewModel viewModel,
     ActionInputDelegate? delegate,
@@ -28,24 +26,58 @@ class ActionInput extends StatelessWidget {
     );
   }
 
-  Color _getBackgroundColor() {
-    Color color;
+  @override
+  State<ActionInput> createState() => _ActionInputState();
+}
 
-    switch(viewModel.style) {
-      case ActionInputStyle.primary:
-        color = brandWhite;
-        break;
-      case ActionInputStyle.secondary:
-        color = alternativeColor;
-        break;
-    }
-    
-    return color;
+class _ActionInputState extends State<ActionInput> {
+  late TextEditingController _internalController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Se o ViewModel tiver controller, usa ele. Se não tiver, cria um interno.
+    _internalController = widget.viewModel.controller ?? TextEditingController();
+
+    // Listener que retorna o texto atualizado
+    _internalController.addListener(() {
+      final text = _internalController.text;
+
+      // Atualiza o viewModel se necessário
+      widget.viewModel.controller?.text = text;
+
+      // Retorna via delegate (caso exista)
+      if (widget.delegate != null) {
+        widget.delegate!.onClick(widget.viewModel);
+      }
+
+      // Se o usuário definiu onChanged no viewModel, chamamos também
+      widget.viewModel.onChanged?.call(text);
+    });
   }
+
+  @override
+  void dispose() {
+    // Só descartamos o controller se ele foi criado internamente
+    if (widget.viewModel.controller == null) {
+      _internalController.dispose();
+    }
+    super.dispose();
+  }
+
+  Color _getBackgroundColor() {
+    switch (widget.viewModel.style) {
+      case ActionInputStyle.primary:
+        return brandWhite;
+      case ActionInputStyle.secondary:
+        return alternativeColor;
+    }
+  }
+
   BorderSide _getBorder() {
     Color color;
-
-    switch (viewModel.style) {
+    switch (widget.viewModel.style) {
       case ActionInputStyle.primary:
         color = brandWhite;
         break;
@@ -55,116 +87,76 @@ class ActionInput extends StatelessWidget {
     }
 
     return BorderSide(
-      color: viewModel.borderColor ?? color, // usa o borderColor custom se vier
+      color: widget.viewModel.borderColor ?? color,
       width: 1.5,
     );
   }
 
   Color _getTextColor() {
-    Color color;
-
-    switch(viewModel.style) {
+    switch (widget.viewModel.style) {
       case ActionInputStyle.primary:
-        color = textTitle;
-        break;
+        return textTitle;
       case ActionInputStyle.secondary:
-        color = textSecondary;
-        break;
+        return textSecondary;
     }
-
-    return color;
   }
 
-  Color _getIconColor() {
-    Color color;
-
-    switch(viewModel.style) {
-      case ActionInputStyle.primary:
-        color = textTitle;
-        break;
-      case ActionInputStyle.secondary:
-        color = textSecondary;
-        break;
-    }
-
-    return color;
-  }
+  Color _getIconColor() => _getTextColor();
 
   List<TextInputFormatter> _getFormatters() {
-      switch (viewModel.formatter) {
-        case ActionTypeInputFormatter.digitsOnly:
-          return [FilteringTextInputFormatter.digitsOnly];
-
-        case ActionTypeInputFormatter.singleLine:
-          return [FilteringTextInputFormatter.singleLineFormatter];
-
-        case ActionTypeInputFormatter.lettersOnly:
-          return [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-          ];
-
-        case ActionTypeInputFormatter.lettersAndDigits:
-          return [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
-          ];
-
-        case ActionTypeInputFormatter.decimal:
-          return [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-          ];
-
-        case ActionTypeInputFormatter.decimal2Fixed:
-          return [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d{0,2})?')),
-          ];
-
-        case ActionTypeInputFormatter.global:
-          return []; // sem restrição
-      }
+    switch (widget.viewModel.formatter) {
+      case ActionTypeInputFormatter.digitsOnly:
+        return [FilteringTextInputFormatter.digitsOnly];
+      case ActionTypeInputFormatter.singleLine:
+        return [FilteringTextInputFormatter.singleLineFormatter];
+      case ActionTypeInputFormatter.lettersOnly:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))];
+      case ActionTypeInputFormatter.lettersAndDigits:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))];
+      case ActionTypeInputFormatter.decimal:
+        return [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))];
+      case ActionTypeInputFormatter.decimal2Fixed:
+        return [FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d{0,2})?'))];
+      case ActionTypeInputFormatter.global:
+        return [];
     }
+  }
 
-   @override
+  @override
   Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+
     return TextField(
-      controller: viewModel.controller,
+      controller: _internalController,
       readOnly: viewModel.readOnly,
       enabled: viewModel.enabled,
       obscureText: viewModel.obscureText,
       keyboardType: viewModel.keyboardType,
       textInputAction: viewModel.textInputAction,
-      onChanged: viewModel.onChanged,
       onSubmitted: viewModel.onSubmitted,
       maxLength: viewModel.maxLength,
-      buildCounter: viewModel.showCounter
-        ? null
-        : (_, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
+      buildCounter: viewModel.showCounter ? null : (_, {required int currentLength, required int? maxLength, required bool isFocused}) => null,
       onTap: viewModel.onTap,
       style: TextStyle(color: _getTextColor()),
       inputFormatters: _getFormatters(),
       decoration: InputDecoration(
         labelText: viewModel.labelText,
-        labelStyle: TextStyle(color: _getTextColor()), // <- controla a cor do label
-        hoverColor: _getBackgroundColor(), // <-- cor do hover no fundo
-
+        labelStyle: TextStyle(color: _getTextColor()),
+        hoverColor: _getBackgroundColor(),
         hintText: viewModel.hintText,
-        hintStyle: TextStyle(color: _getTextColor().withOpacity(0.6)), // <- cor do hint
-
+        hintStyle: TextStyle(color: _getTextColor().withOpacity(0.6)),
         helperText: viewModel.helperText,
-        helperStyle: TextStyle(color: _getTextColor().withOpacity(0.7)), // <- helper text
-
+        helperStyle: TextStyle(color: _getTextColor().withOpacity(0.7)),
         errorText: viewModel.errorText,
-        errorStyle: TextStyle(color:destructiveColor), // <- erro separado
-
+        errorStyle: const TextStyle(color: destructiveColor),
         prefixIcon: viewModel.prefixIcon != null
             ? Icon(viewModel.prefixIcon, color: viewModel.iconColor ?? _getIconColor())
             : null,
         suffixIcon: viewModel.suffixIcon != null
             ? Icon(viewModel.suffixIcon, color: viewModel.iconColor ?? _getIconColor())
             : null,
-
         filled: true,
         fillColor: _getBackgroundColor(),
-
         enabledBorder: OutlineInputBorder(
           borderSide: _getBorder(),
           borderRadius: BorderRadius.circular(8),
@@ -180,5 +172,4 @@ class ActionInput extends StatelessWidget {
       ),
     );
   }
-
 }

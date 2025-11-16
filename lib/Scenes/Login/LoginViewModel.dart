@@ -1,9 +1,34 @@
-import 'package:arc_to_do_list/Scenes/Login/LoginService.dart';
-import 'package:arc_to_do_list/resources/shared/AppCoordinator.dart';
+import '../../resources/shared/AppCoordinator.dart';
+import 'LoginService.dart';
 
 class LoginViewModel{
   final LoginService service;
   final AppCoordinator coordinator;
 
   const LoginViewModel({required this.service, required this.coordinator});
+
+  AppCoordinator get appCoordinator => coordinator;
+
+  Future<void> performLogin(
+      String user,
+      String password, {
+      required void Function(String name, String address) onSuccess,
+    }) async {
+      final response = await service.fetchLogin(
+        user: user,
+        password: password,
+      );
+
+      final name = response["name"] as String? ?? "";
+      final address = response["address"] as String? ?? "";
+
+      onSuccess(name, address);
+    }
+
+    void presentHome(
+      String name,
+      String address
+    ){
+      coordinator.goToHome(name: name, address: address);
+    }
 }
