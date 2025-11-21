@@ -31,29 +31,18 @@ class ActionInput extends StatefulWidget {
 }
 
 class _ActionInputState extends State<ActionInput> {
-  late TextEditingController _internalController;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
 
-    // Se o ViewModel tiver controller, usa ele. Se não tiver, cria um interno.
-    _internalController = widget.viewModel.controller ?? TextEditingController();
+     _controller = widget.viewModel.controller ?? TextEditingController();
 
-    // Listener que retorna o texto atualizado
-    _internalController.addListener(() {
-      final text = _internalController.text;
-
-      // Atualiza o viewModel se necessário
-      widget.viewModel.controller?.text = text;
-
-      // Retorna via delegate (caso exista)
-      if (widget.delegate != null) {
-        widget.delegate!.onClick(widget.viewModel);
-      }
-
-      // Se o usuário definiu onChanged no viewModel, chamamos também
+    _controller.addListener(() {
+      final text = _controller.text;
       widget.viewModel.onChanged?.call(text);
+      widget.delegate?.onClick(widget.viewModel);
     });
   }
 
@@ -61,8 +50,9 @@ class _ActionInputState extends State<ActionInput> {
   void dispose() {
     // Só descartamos o controller se ele foi criado internamente
     if (widget.viewModel.controller == null) {
-      _internalController.dispose();
+        _controller.dispose();
     }
+    
     super.dispose();
   }
 
@@ -127,7 +117,7 @@ class _ActionInputState extends State<ActionInput> {
     final viewModel = widget.viewModel;
 
     return TextField(
-      controller: _internalController,
+      controller: _controller,
       readOnly: viewModel.readOnly,
       enabled: viewModel.enabled,
       obscureText: viewModel.obscureText,

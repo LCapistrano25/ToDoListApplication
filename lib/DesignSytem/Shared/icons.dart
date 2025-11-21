@@ -26,4 +26,6 @@ class AppIcons {
   static const IconData list = Icons.list_outlined;
 
   static const IconData arrowBack = Icons.arrow_back_outlined;
+
+  static const IconData menu = Icons.menu_outlined;
 }

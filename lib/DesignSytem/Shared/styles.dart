@@ -34,15 +34,6 @@ const TextStyle poppinsRegular16 = TextStyle(
   height: 1.4,
 );
 
-// Poppins Regular 16px, blue color, line-height: 22.4px (1.4)
-const TextStyle poppinsRegular16Blue = TextStyle(
-  fontFamily: 'Poppins',
-  fontSize: 16,
-  fontWeight: FontWeight.w400,
-  color: Color(0xFF6EB2FD),
-  height: 1.4,
-);
-
 // Poppins Regular 20px, line-height: 28px (1.4)
 const TextStyle poppinsRegular20 = TextStyle(
   fontFamily: 'Poppins',
