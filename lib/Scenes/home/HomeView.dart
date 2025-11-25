@@ -18,17 +18,21 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> implements ActionIconButtonDelegate {
-
+class _HomeViewState extends State<HomeView> 
+implements ActionIconButtonDelegate, ActionSidebarDelegate {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _selectedIndex = 0;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         leading: menuIconButton(this),
         centerTitle: true, // Adicionado para centralizar o título
         title: Text("To Do List", style: poppinsRegular20),
       ),
-      drawer: sidebar(),  
+      drawer: sidebar(this, _selectedIndex),  
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -43,7 +47,15 @@ class _HomeViewState extends State<HomeView> implements ActionIconButtonDelegate
 
   @override
   void onClick(ActionIconButtonViewModel viewModel) {
-    Scaffold.of(context).openDrawer();
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
+  @override
+  void onItemSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    Navigator.pop(context);
   }
 }
 
@@ -55,7 +67,7 @@ ActionIconButton menuIconButton(ActionIconButtonDelegate delegate) {
   return ActionIconButton.initialize(viewModel: viewModel, delegate: delegate);
 }
 
-ActionSidebar sidebar() {
+ActionSidebar sidebar(ActionSidebarDelegate delegate, int selectedIndex) {  
   final ActionSidebarViewModel viewModel = ActionSidebarViewModel(
     title: 'To Do List',
     style: ActionSidebarStyle.primary,
@@ -64,11 +76,17 @@ ActionSidebar sidebar() {
         style: ActionSidebarItemStyle.primary,
         icon: AppIcons.menu,
         label: 'Home',
+        index: 0,
+        delegate: delegate,
+        isSelected: selectedIndex == 0,
       ),
       ActionSidebarItemViewModel(
         style: ActionSidebarItemStyle.primary,
         icon: AppIcons.settings,
         label: 'Settings',
+        index: 1,
+        delegate: delegate,
+        isSelected: selectedIndex == 1,
       ),
     ],
   );

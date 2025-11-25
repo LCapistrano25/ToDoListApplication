@@ -1,11 +1,10 @@
 import 'package:arc_to_do_list/DesignSytem/Components/Sidebar/action_sidebar_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 
 abstract class ActionSidebarDelegate {
-  void onItemSelected(ActionSidebarItemViewModel item);
+  void onItemSelected(int index);
 }
 
 class ActionSidebar extends StatelessWidget {
@@ -96,7 +95,7 @@ class ActionSidebar extends StatelessWidget {
                     return ActionSidebarItem.instantiate(
                       viewModel: item,
                       onTap: (selectedItem) {
-                        delegate?.onItemSelected(selectedItem);
+                        delegate?.onItemSelected(index);
                       },
                     );
                   },
