@@ -1,6 +1,6 @@
-import 'package:arc_to_do_list/Scenes/home/HomeService.dart';
-import 'package:arc_to_do_list/Scenes/home/HomeView.dart';
-import 'package:arc_to_do_list/Scenes/home/HomeViewModel.dart';
+import 'package:arc_to_do_list/Scenes/Home/HomeService.dart';
+import 'package:arc_to_do_list/Scenes/Home/HomeView.dart';
+import 'package:arc_to_do_list/Scenes/Home/HomeViewModel.dart';
 import 'package:flutter/material.dart';
 
 import '../../resources/shared/AppCoordinator.dart';

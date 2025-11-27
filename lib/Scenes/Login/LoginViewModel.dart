@@ -25,10 +25,10 @@ class LoginViewModel{
       onSuccess(name, address);
     }
 
-    void presentHome(
-      String name,
-      String address
-    ){
-      coordinator.goToHome(name: name, address: address);
-    }
+  void presentHome(
+    String name,
+    String address
+  ){
+    coordinator.goToHome(name: name, address: address);
+  }
 }

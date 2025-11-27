@@ -1,10 +1,11 @@
 import 'package:arc_to_do_list/DesignSytem/Components/Sidebar/action_sidebar_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 
 abstract class ActionSidebarDelegate {
-  void onItemSelected(int index);
+  void onItemSelected(ActionSidebarItemViewModel item);
 }
 
 class ActionSidebar extends StatelessWidget {
@@ -73,15 +74,9 @@ class ActionSidebar extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
 
-              /// Título do menu
-              RichText(
-                text: TextSpan(
-                  text: 'To do',
-                  style: TextStyle(color: _getTextColor(), fontWeight: FontWeight.w900, fontSize: 18),
-                  children: const <TextSpan>[
-                    TextSpan(text: ' List', style: TextStyle(fontWeight: FontWeight.w900, color: primaryColor))
-                  ],
-                ),
+              viewModel.title ?? Text(
+                'To do List',
+                style: TextStyle(color: _getTextColor(), fontWeight: FontWeight.w900, fontSize: 18),
               ),
 
               const SizedBox(height: 16),
@@ -92,10 +87,13 @@ class ActionSidebar extends StatelessWidget {
                   itemCount: viewModel.items.length,
                   itemBuilder: (_, index) {
                     final item = viewModel.items[index];
+                    final effectiveItem = item.copyWith(
+                      isSelected: item.index == viewModel.selectedIndex,
+                    );
                     return ActionSidebarItem.instantiate(
-                      viewModel: item,
+                      viewModel: effectiveItem,
                       onTap: (selectedItem) {
-                        delegate?.onItemSelected(index);
+                        delegate?.onItemSelected(selectedItem);
                       },
                     );
                   },

@@ -8,11 +8,13 @@ enum ActionSidebarStyle {
 class ActionSidebarViewModel {
   final ActionSidebarStyle style;
   final List<ActionSidebarItemViewModel> items;
-  final String title;
+  final dynamic title;
+  final int selectedIndex;
 
   ActionSidebarViewModel({
     required this.style,
     required this.items,
     required this.title,
+    required this.selectedIndex,
   });
 }

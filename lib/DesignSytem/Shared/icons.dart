@@ -28,4 +28,6 @@ class AppIcons {
   static const IconData arrowBack = Icons.arrow_back_outlined;
 
   static const IconData menu = Icons.menu_outlined;
+
+  static const IconData delete = Icons.delete_outlined;
 }
