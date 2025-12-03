@@ -30,4 +30,6 @@ class AppIcons {
   static const IconData menu = Icons.menu_outlined;
 
   static const IconData delete = Icons.delete_outlined;
+
+  static const IconData logout = Icons.logout_outlined;
 }

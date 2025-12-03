@@ -86,7 +86,7 @@ class _LoginViewState extends State<LoginView>
   }
 
   void _showLoading() {
-    final vm = ActionLoadViewModel(4, 48, ActionLoadType.secondary);
+    final vm = ActionLoadViewModel(4, 48, ActionLoadType.primary);
     showDialog(
       context: context,
       barrierDismissible: false,

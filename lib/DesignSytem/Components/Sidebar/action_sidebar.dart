@@ -91,7 +91,7 @@ class ActionSidebar extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
 
-              if (viewModel.title != null)
+              if (viewModel.title == null) 
                 RichText(
                   text: TextSpan(
                     children: [
@@ -113,7 +113,7 @@ class ActionSidebar extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                ), 
 
 
               const SizedBox(height: 16),
