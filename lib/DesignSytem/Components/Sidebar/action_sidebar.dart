@@ -41,7 +41,7 @@ class ActionSidebar extends StatelessWidget {
     return color;
   }
 
-  Color _getBackgroudColor() {
+  Color _getBackgroundColor() {
     Color? color = black;
 
     switch(viewModel.style) {
@@ -56,10 +56,27 @@ class ActionSidebar extends StatelessWidget {
     return color;
   }
 
+  List<Color> _getTitleColor() {
+    Color? color1 = black;
+    Color? color2 = primaryColor;
+
+    switch(viewModel.style) {
+      case ActionSidebarStyle.primary:
+        color1 = black;
+        color2 = primaryColor;
+        break;
+      case ActionSidebarStyle.secundary:
+        color1 = brandWhite;
+        color2 = primaryColor;
+        break;
+    }
+    return [color1, color2];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: _getBackgroudColor(),
+      backgroundColor: _getBackgroundColor(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(24),
@@ -74,10 +91,30 @@ class ActionSidebar extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
 
-              viewModel.title ?? Text(
-                'To do List',
-                style: TextStyle(color: _getTextColor(), fontWeight: FontWeight.w900, fontSize: 18),
-              ),
+              if (viewModel.title != null)
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'To do',
+                        style: TextStyle(
+                          color: _getTitleColor()[0],
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' List',
+                        style: TextStyle(
+                          color: _getTitleColor()[1],
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
 
               const SizedBox(height: 16),
 

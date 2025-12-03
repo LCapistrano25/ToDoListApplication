@@ -1,4 +1,5 @@
 import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
+import 'package:flutter/material.dart';
 
 enum ActionSidebarStyle {
   primary,
@@ -8,13 +9,13 @@ enum ActionSidebarStyle {
 class ActionSidebarViewModel {
   final ActionSidebarStyle style;
   final List<ActionSidebarItemViewModel> items;
-  final dynamic title;
+  final Widget? title;
   final int selectedIndex;
 
   ActionSidebarViewModel({
     required this.style,
     required this.items,
-    required this.title,
+    this.title,
     required this.selectedIndex,
   });
 }

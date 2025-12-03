@@ -51,9 +51,9 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
   }
 
   @override
-  void onItemSelected(int index) {
+  void onItemSelected(ActionSidebarItemViewModel item) {
     setState(() {
-      _selectedIndex = index;
+      _selectedIndex = item.index;
     });
     Navigator.pop(context);
   }
@@ -69,8 +69,14 @@ ActionIconButton menuIconButton(ActionIconButtonDelegate delegate) {
 
 ActionSidebar sidebar(ActionSidebarDelegate delegate, int selectedIndex) {  
   final ActionSidebarViewModel viewModel = ActionSidebarViewModel(
-    title: 'To Do List',
+    title: RichText(
+      text: TextSpan(
+        text: 'To Do List',
+        style: poppinsRegular20.copyWith(color: black),
+      ),
+    ),
     style: ActionSidebarStyle.primary,
+    selectedIndex: selectedIndex,
     items: [
       ActionSidebarItemViewModel(
         style: ActionSidebarItemStyle.primary,
@@ -90,5 +96,5 @@ ActionSidebar sidebar(ActionSidebarDelegate delegate, int selectedIndex) {
       ),
     ],
   );
-  return ActionSidebar.instantiate(viewModel: viewModel);
+  return ActionSidebar.instantiate(viewModel: viewModel, delegate: delegate);
 }

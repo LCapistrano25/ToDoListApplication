@@ -1,4 +1,4 @@
-class Homeservice {
+class HomeService {
   Future<List<Map<String, dynamic>>> fetchItemList() async {
     await Future.delayed(const Duration(seconds: 3));
     return [
