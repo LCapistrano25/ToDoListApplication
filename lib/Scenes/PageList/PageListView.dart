@@ -13,6 +13,7 @@ import 'package:arc_to_do_list/DesignSytem/Components/Buttons/FloatingButton/act
 import 'package:arc_to_do_list/Scenes/Home/Components/FloatingButtonHomeView.dart';
 import 'package:arc_to_do_list/Scenes/PageList/Components/ItemDialogsPageListView.dart';
 import 'package:arc_to_do_list/models/page_list_item.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Inputs/currency_brl_input_formatter.dart';
 
 class PageListView extends StatefulWidget {
   final PageListViewModel viewModel;
@@ -92,13 +93,16 @@ class _PageListViewState extends State<PageListView>
                           final type = item.type;
                           final quantity = item.quantity;
                           final value = item.value;
+                          final formattedValue = value == null || value.isEmpty
+                              ? null
+                              : CurrencyBRLInputFormatter.formatFromText(value);
                           final vm = ActionCardItemInListViewModel(
                             id: id,
                             style: ActionCardItemInListStyle.primary,
                             title: title,
                             type: type,
                             quantity: quantity,
-                            value: value,
+                            value: formattedValue,
                             editIcon: AppIcons.edit,
                             deleteIcon: AppIcons.delete,
                           );

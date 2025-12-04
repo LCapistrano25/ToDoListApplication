@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Inputs/currency_brl_input_formatter.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
@@ -62,9 +63,10 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
       final title = nameController.text.trim();
       final quantityText = quantityController.text.trim();
       final value = valueController.text.trim();
+      final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
       if (title.isEmpty) return;
       final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
-      viewModel.addItem(itemTitle: title, quantity: qty, value: value.isEmpty ? null : value);
+      viewModel.addItem(itemTitle: title, quantity: qty, value: normalized);
       Navigator.of(context).pop();
     },
   );
@@ -143,9 +145,10 @@ void showEditItemDialog(
       final title = nameController.text.trim();
       final quantityText = quantityController.text.trim();
       final value = valueController.text.trim();
+      final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
       if (title.isEmpty) return;
       final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
-      viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: value.isEmpty ? null : value);
+      viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: normalized);
       Navigator.of(context).pop();
     },
   );
