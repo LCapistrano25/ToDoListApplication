@@ -4,6 +4,18 @@ class PageListService {
   final Map<int, List<Map<String, dynamic>>> _listItems = {};
   final Map<int, int> _nextItemId = {};
 
+  String? _normalizeValueStr(String? v) {
+    if (v == null) return null;
+    final s = v.trim();
+    if (s.isEmpty) return '';
+    final digits = s.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.isEmpty) return '';
+    final cents = int.parse(digits);
+    final intPart = cents ~/ 100;
+    final decPart = cents % 100;
+    return intPart.toString() + '.' + decPart.toString().padLeft(2, '0');
+  }
+
   List<Map<String, dynamic>> _ensureList(int idList, String listType) {
     return _listItems.putIfAbsent(idList, () {
       final initial = idList == 1
@@ -51,7 +63,7 @@ class PageListService {
     await Future.delayed(const Duration(milliseconds: 200));
     final list = _ensureList(idList, listType);
     final nextId = (_nextItemId[idList] ?? 1);
-    list.add({'id': nextId, 'title': title, 'type': listType, 'quantity': quantity, 'value': value});
+    list.add({'id': nextId, 'title': title, 'type': listType, 'quantity': quantity, 'value': _normalizeValueStr(value)});
     _nextItemId[idList] = nextId + 1;
   }
 
@@ -86,7 +98,7 @@ class PageListService {
         'title': title,
         'type': listType,
         'quantity': quantity ?? current['quantity'],
-        'value': value ?? current['value'],
+        'value': value != null ? _normalizeValueStr(value) : current['value'],
       };
     }
   }

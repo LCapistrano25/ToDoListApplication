@@ -45,7 +45,7 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     style: ActionInputStyle.primary,
     labelText: 'Valor',
     controller: valueController,
-    keyboardType: TextInputType.number,
+    keyboardType: const TextInputType.numberWithOptions(decimal: true),
     formatter: ActionTypeInputFormatter.currencyBRL,
     borderColor: textDisabled,
     borderSize: 0.5,
@@ -79,7 +79,8 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
       if (isCurrency) {
         final quantityText = quantityController.text.trim();
         final value = valueController.text.trim();
-        final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final normalizedRaw = CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final normalized = (normalizedRaw.isEmpty) ? null : normalizedRaw;
         final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
         viewModel.addItem(itemTitle: title, quantity: qty, value: normalized);
       } else {
@@ -144,7 +145,7 @@ void showEditItemDialog(
     style: ActionInputStyle.primary,
     labelText: 'Valor',
     controller: valueController,
-    keyboardType: TextInputType.number,
+    keyboardType: const TextInputType.numberWithOptions(decimal: true),
     formatter: ActionTypeInputFormatter.currencyBRL,
     borderColor: textDisabled,
     borderSize: 0.5,
@@ -179,7 +180,8 @@ void showEditItemDialog(
       if (isCurrency) {
         final quantityText = quantityController.text.trim();
         final value = valueController.text.trim();
-        final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final normalizedRaw = CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final normalized = (normalizedRaw.isEmpty) ? null : normalizedRaw;
         final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
         viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: normalized);
       } else {
