@@ -1,11 +1,11 @@
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpCreateListDialog/action_create_list_dialog_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_create_list_dialog_view_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class ActionCreateListDialogDelegate {
@@ -20,7 +20,6 @@ class ActionCreateListDialog extends StatefulWidget {
   final VoidCallback? onCancel;
 
   const ActionCreateListDialog._({
-    super.key,
     required this.viewModel,
     this.delegate,
     this.onCreate,

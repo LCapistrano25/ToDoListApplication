@@ -1,6 +1,6 @@
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpDelete/action_confirm_delete_dialog_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:flutter/material.dart';
 

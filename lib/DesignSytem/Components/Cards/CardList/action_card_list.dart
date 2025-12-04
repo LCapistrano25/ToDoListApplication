@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpDelete/action_confirm_delete_dialog.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpDelete/action_confirm_delete_dialog_view_model.dart';
 
 abstract class ActionCardItemListDelegate {
   void onTap(ActionCardItemListViewModel viewModel);

@@ -7,8 +7,8 @@ import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item_view_model.dart';
 import 'package:arc_to_do_list/Scenes/PageList/PageListViewModel.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpDelete/action_confirm_delete_dialog.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpDelete/action_confirm_delete_dialog_view_model.dart';
 
 void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
 
