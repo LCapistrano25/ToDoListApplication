@@ -1,12 +1,14 @@
-import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Shared/styles.dart';
 import 'package:arc_to_do_list/Scenes/Login/LoginViewModel.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class LoginView extends StatefulWidget {
   final LoginViewModel viewModel;
@@ -20,30 +22,43 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView>
     implements ActionButtonDelegate {
 
-  late final ActionInputViewModel usernameVM;
-  late final ActionInputViewModel passwordVM;
+  late ActionInputViewModel usernameVM;
+  late ActionInputViewModel passwordVM;
   bool _isLoading = false;
   bool _canSubmit = false;
+  late final TextEditingController _userController;
+  late final TextEditingController _passController;
+  bool _obscurePassword = true;
+
+  void _syncValidity() {
+    final user = _userController.text.trim();
+    final pass = _passController.text.trim();
+    final next = user.isNotEmpty && pass.isNotEmpty;
+    if (next != _canSubmit) {
+      setState(() { _canSubmit = next; });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
 
-    // ViewModels com callbacks de mudança para validar e habilitar/desabilitar o botão
-    void syncValidity() {
-      final user = usernameVM.controller?.text.trim() ?? '';
-      final pass = passwordVM.controller?.text.trim() ?? '';
-      final next = user.isNotEmpty && pass.isNotEmpty;
-      if (next != _canSubmit) {
-        setState(() { _canSubmit = next; });
-      }
-    }
+    _userController = TextEditingController();
+    _passController = TextEditingController();
 
-    usernameVM = buildUsernameViewModel(onChanged: (_) => syncValidity());
-    passwordVM = buildPasswordViewModel(onChanged: (_) => syncValidity());
+    usernameVM = buildUsernameViewModel(
+      onChanged: (_) => _syncValidity(),
+      controller: _userController,
+    );
+    passwordVM = buildPasswordViewModel(
+      onChanged: (_) => _syncValidity(),
+      controller: _passController,
+      obscure: _obscurePassword,
+      onToggle: _togglePasswordVisibility,
+    );
 
     // Valida estado inicial
-    syncValidity();
+    _syncValidity();
   }
 
   ActionInput get username => ActionInput.instantiate(viewModel: usernameVM);
@@ -52,44 +67,106 @@ class _LoginViewState extends State<LoginView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Olá, Seja Bem Vindo!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/fundo_login.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Image.file(
+                File('assets/images/fundo_login.png'),
+                fit: BoxFit.cover,
+              ),
             ),
-
-            const SizedBox(height: 24),
-
-            username,
-            const SizedBox(height: 16),
-
-            password,
-            const SizedBox(height: 16),
-
-            buildLoginButton(delegate: this, enabled: !_isLoading && _canSubmit),
-          ],
+          ),
+          Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: SizedBox(
+              width: 378,
+              child: Container
+              (
+                padding: const EdgeInsets.symmetric(horizontal: 31, vertical: 49),
+                decoration: BoxDecoration(
+                  color: neutralLightGray,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Olá!',
+                            style: poppinsRegular40.copyWith(
+                              color: primaryColor,
+                              fontWeight: FontWeight.w600,
+                              height: 1.10,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Seja Bem vindo!',
+                            style: poppinsRegular32.copyWith(
+                              color: alternativeColor,
+                              fontWeight: FontWeight.w500,
+                              height: 1.20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      width: 326,
+                      child: username,
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      width: 326,
+                      child: password,
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      width: 326,
+                      height: 48,
+                      child: buildLoginButton(
+                        delegate: this,
+                        enabled: !_isLoading && _canSubmit,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
+          ),
+        ],
       ),
     );
   }
 
   @override
   void dispose() {
-    usernameVM.controller?.dispose();
-    passwordVM.controller?.dispose();
+    _userController.dispose();
+    _passController.dispose();
     super.dispose();
   }
 
   @override
   void onActionButtonClick(ActionButtonViewModel vm) {
     if (_isLoading) return;
-    final user = usernameVM.controller?.text ?? '';
-    final pass = passwordVM.controller?.text ?? '';
+    final user = _userController.text;
+    final pass = _passController.text;
 
     setState(() { _isLoading = true; });
     _showLoading();
@@ -115,26 +192,44 @@ class _LoginViewState extends State<LoginView>
       ),
     );
   }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+      passwordVM = buildPasswordViewModel(
+        onChanged: (_) => _syncValidity(),
+        controller: _passController,
+        obscure: _obscurePassword,
+        onToggle: _togglePasswordVisibility,
+      );
+    });
+  }
 }
 
-ActionInputViewModel buildUsernameViewModel({ValueChanged<String>? onChanged}) {
+ActionInputViewModel buildUsernameViewModel({ValueChanged<String>? onChanged, TextEditingController? controller}) {
   return ActionInputViewModel(
     style: ActionInputStyle.primary,
-    hintText: 'Usuário',
-    controller: TextEditingController(),
+    labelText: 'Usuário',
+    controller: controller ?? TextEditingController(),
     maxLength: 20,
+    iconColor: textSecondary,
     onChanged: onChanged,
+    borderColor: textSecondary,
   );
 }
 
-ActionInputViewModel buildPasswordViewModel({ValueChanged<String>? onChanged}) {
+ActionInputViewModel buildPasswordViewModel({ValueChanged<String>? onChanged, TextEditingController? controller, bool obscure = true, VoidCallback? onToggle}) {
   return ActionInputViewModel(
     style: ActionInputStyle.primary,
-    hintText: 'Senha',
-    obscureText: true,
-    controller: TextEditingController(),
+    labelText: 'Senha',
+    obscureText: obscure,
+    controller: controller ?? TextEditingController(),
     maxLength: 15,
+    suffixIcon: obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+    iconColor: textSecondary,
     onChanged: onChanged,
+    onSuffixIconTap: onToggle,
+    borderColor: textSecondary,
   );
 }
 

@@ -40,10 +40,13 @@ class ActionInputViewModel {
   final int? minLines; // Número mínimo de linhas exibidas
   final int? maxLength; // Limite máximo de caracteres
   final bool showCounter;
+  final double? borderSize; // Tamanho da borda
 
   final ValueChanged<String>? onChanged; // Callback chamado sempre que o texto muda
   final ValueChanged<String>? onSubmitted; // Callback chamado ao enviar (pressionar "done")
   final VoidCallback? onTap; // Callback chamado quando o campo é clicado
+  final VoidCallback? onPrefixIconTap;
+  final VoidCallback? onSuffixIconTap;
 
   final Color? backgroundColor; // Cor de fundo do input
   final Color? borderColor; // Cor da borda
@@ -74,10 +77,13 @@ class ActionInputViewModel {
     this.onChanged,
     this.onSubmitted,
     this.onTap,
+    this.onPrefixIconTap,
+    this.onSuffixIconTap,
     this.backgroundColor,
     this.borderColor,
     this.textColor,
     this.iconColor,
+    this.borderSize = 0.5,
   }) : assert(
           text != null || hintText != null || labelText != null,
           'Deve ter pelo menos um texto, hint ou label.',

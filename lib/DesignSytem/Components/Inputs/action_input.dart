@@ -78,7 +78,7 @@ class _ActionInputState extends State<ActionInput> {
 
     return BorderSide(
       color: widget.viewModel.borderColor ?? color,
-      width: 1.5,
+      width: widget.viewModel.borderSize ?? 1.5,
     );
   }
 
@@ -140,10 +140,20 @@ class _ActionInputState extends State<ActionInput> {
         errorText: viewModel.errorText,
         errorStyle: const TextStyle(color: destructiveColor),
         prefixIcon: viewModel.prefixIcon != null
-            ? Icon(viewModel.prefixIcon, color: viewModel.iconColor ?? _getIconColor())
+            ? (viewModel.onPrefixIconTap != null
+                ? IconButton(
+                    onPressed: viewModel.onPrefixIconTap,
+                    icon: Icon(viewModel.prefixIcon, color: viewModel.iconColor ?? _getIconColor()),
+                  )
+                : Icon(viewModel.prefixIcon, color: viewModel.iconColor ?? _getIconColor()))
             : null,
         suffixIcon: viewModel.suffixIcon != null
-            ? Icon(viewModel.suffixIcon, color: viewModel.iconColor ?? _getIconColor())
+            ? (viewModel.onSuffixIconTap != null
+                ? IconButton(
+                    onPressed: viewModel.onSuffixIconTap,
+                    icon: Icon(viewModel.suffixIcon, color: viewModel.iconColor ?? _getIconColor()),
+                  )
+                : Icon(viewModel.suffixIcon, color: viewModel.iconColor ?? _getIconColor()))
             : null,
         filled: true,
         fillColor: _getBackgroundColor(),

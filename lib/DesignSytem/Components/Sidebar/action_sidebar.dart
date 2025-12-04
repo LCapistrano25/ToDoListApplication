@@ -27,20 +27,6 @@ class ActionSidebar extends StatelessWidget {
     );
   }
 
-  Color _getTextColor() {
-    Color? color = black;
-
-    switch(viewModel.style) {
-      case ActionSidebarStyle.primary:
-        color = black;
-        break;
-      case ActionSidebarStyle.secundary:
-        color = brandWhite;
-        break;
-    }
-    return color;
-  }
-
   Color _getBackgroundColor() {
     Color? color = black;
 
