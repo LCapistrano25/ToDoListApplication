@@ -14,12 +14,26 @@ class PageListItem {
   });
 
   factory PageListItem.fromJson(Map<String, dynamic> json) {
+    final dynamic q = json['quantity'];
+    final int? quantity = q == null
+        ? null
+        : (q is num
+            ? q.toInt()
+            : (q is String ? int.tryParse(q) : null));
+
+    final dynamic v = json['value'];
+    final String? value = v == null
+        ? null
+        : (v is String
+            ? v
+            : (v is num ? v.toStringAsFixed(2) : v.toString()));
+
     return PageListItem(
       id: json['id'] as int,
       title: json['title'] as String,
       type: json['type'] as String,
-      quantity: json['quantity'] as int?,
-      value: json['value'] as String?,
+      quantity: quantity,
+      value: value,
     );
   }
 

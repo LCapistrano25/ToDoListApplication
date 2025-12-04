@@ -36,19 +36,11 @@ ActionSidebar sidebar(ActionSidebarDelegate delegate, int selectedIndex) {
       ),
       ActionSidebarItemViewModel(
         style: styleItem,
-        icon: AppIcons.archive,
-        label: 'Arquivo',
+        icon: AppIcons.logout,
+        label: 'Sair',
         index: 2,
         delegate: delegate,
         isSelected: selectedIndex == 2,
-      ),
-      ActionSidebarItemViewModel(
-        style: styleItem,
-        icon: AppIcons.logout,
-        label: 'Sair',
-        index: 3,
-        delegate: delegate,
-        isSelected: selectedIndex == 3,
       ),
     ],
   );

@@ -24,7 +24,6 @@ import 'package:arc_to_do_list/models/list_type.dart';
 enum HomeViewIndex {
   items,
   createList,
-  archive,
   logout,
 }
 

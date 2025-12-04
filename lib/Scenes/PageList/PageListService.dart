@@ -21,7 +21,24 @@ class PageListService {
   Future<List<PageListItem>> fetchListItems({required int idList, required String listType}) async {
     await Future.delayed(const Duration(milliseconds: 300));
     final list = _ensureList(idList, listType);
-    return list.map((e) => PageListItem.fromJson(e)).toList();
+    final safe = <PageListItem>[];
+    for (final e in list) {
+      try {
+        final m = Map<String, dynamic>.from(e);
+        final v = m['value'];
+        if (v is num) {
+          m['value'] = v.toStringAsFixed(2);
+        }
+        final q = m['quantity'];
+        if (q is String) {
+          m['quantity'] = int.tryParse(q);
+        }
+        safe.add(PageListItem.fromJson(m));
+      } catch (_) {
+        continue;
+      }
+    }
+    return safe;
   }
 
   Future<void> addItem({
@@ -63,12 +80,13 @@ class PageListService {
     final list = _ensureList(idList, listType);
     final idx = list.indexWhere((e) => (e['id'] as int) == itemId);
     if (idx >= 0) {
+      final current = Map<String, dynamic>.from(list[idx]);
       list[idx] = {
         'id': itemId,
         'title': title,
         'type': listType,
-        'quantity': quantity,
-        'value': value,
+        'quantity': quantity ?? current['quantity'],
+        'value': value ?? current['value'],
       };
     }
   }

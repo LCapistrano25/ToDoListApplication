@@ -1,5 +1,5 @@
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_create_list_dialog.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_create_list_dialog_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpCreateListDialog/action_create_list_dialog.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/PopUpCreateListDialog/action_create_list_dialog_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:flutter/material.dart';
 
