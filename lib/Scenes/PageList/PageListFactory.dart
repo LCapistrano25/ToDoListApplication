@@ -9,7 +9,7 @@ class PageListFactory {
     required AppCoordinator coordinator,
     required String title,
     required String type,
-    required int IdList,
+    required int idList,
   }) {
     return PageListView(
       viewModel: PageListViewModel(
@@ -17,7 +17,7 @@ class PageListFactory {
         coordinator: coordinator,
         title: title,
         type: type,
-        IdList: IdList,
+        idList: idList,
       ),
     );
   }

@@ -1,3 +1,6 @@
+import 'package:arc_to_do_list/models/list_summary.dart';
+import 'package:arc_to_do_list/models/list_type.dart';
+
 class HomeService {
   final List<Map<String, dynamic>> _items = [
     {'id': 1, 'title': 'Mercado', 'list_type': 'Lista de Compras'},
@@ -11,9 +14,9 @@ class HomeService {
     {'type': 'Construção'},
   ];
 
-  Future<List<Map<String, dynamic>>> fetchItemList() async {
+  Future<List<ListSummary>> fetchItemList() async {
     await Future.delayed(const Duration(seconds: 1));
-    return List<Map<String, dynamic>>.from(_items);
+    return _items.map((e) => ListSummary.fromJson(e)).toList();
   }
 
   Future<void> createItem({required String title, required String type}) async {
@@ -24,8 +27,8 @@ class HomeService {
     _items.add({'id': nextId, 'title': title, 'list_type': type});
   }
 
-  Future<List<Map<String, dynamic>>> fetchTypeList() async {
+  Future<List<ListType>> fetchTypeList() async {
     await Future.delayed(const Duration(seconds: 1));
-    return List<Map<String, dynamic>>.from(_types);
+    return _types.map((e) => ListType.fromJson(e)).toList();
   }
 }

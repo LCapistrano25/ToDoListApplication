@@ -18,6 +18,7 @@ import 'package:arc_to_do_list/Scenes/Home/Components/LoadHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/SidebarHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/HomeViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:arc_to_do_list/models/list_summary.dart';
 
 enum HomeViewIndex {
   items,
@@ -38,7 +39,7 @@ class _HomeViewState extends State<HomeView>
 implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButtonDelegate, ActionCardItemListDelegate {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
-  List<Map<String, dynamic>> items = [];
+  List<ListSummary> items = [];
   List<String> typeList = [];
   
   @override
@@ -54,7 +55,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
     });
     widget.viewModel.typeList.addListener(() {
       setState(() {
-        typeList = widget.viewModel.typeList.value.map((e) => e['type'] as String).toList();
+        typeList = widget.viewModel.typeList.value.map((e) => e.type).toList();
       });
     });
   }
@@ -88,7 +89,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
                   if (status == LoadStatus.error) {
                     return const Center(child: Text('Erro ao carregar'));
                   }
-                  return ValueListenableBuilder<List<Map<String, dynamic>>>(
+                  return ValueListenableBuilder<List<ListSummary>>(
                     valueListenable: widget.viewModel.items,
                     builder: (context, items, __) {
                       if (items.isEmpty) {
@@ -99,9 +100,9 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = items[index];
-                          final id = item['id'] as int? ?? index;
-                          final title = item['title'] as String? ?? '';
-                          final type = item['list_type'] as String? ?? '';
+                          final id = item.id;
+                          final title = item.title;
+                          final type = item.listType;
                           return cardItemList(id: id, title: title, type: type, delegate: this);
                         },
                       );
@@ -148,7 +149,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
 
   @override
   void onTap(ActionCardItemListViewModel viewModel) {
-    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type, IdList: viewModel.id);
+    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type, idList: viewModel.id);
   }
 
   @override

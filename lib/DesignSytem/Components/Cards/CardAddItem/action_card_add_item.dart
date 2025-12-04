@@ -29,7 +29,7 @@ class ActionCardAddItem extends StatelessWidget {
 
     return Container(
       width: 416,
-      padding: const EdgeInsets.all(31),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isSecondary ? alternativeColor : brandWhite,
         borderRadius: BorderRadius.circular(10),
@@ -50,7 +50,7 @@ class ActionCardAddItem extends StatelessWidget {
           ),
           const SizedBox(height: 17),
           SizedBox(
-            width: 350,
+            width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -66,7 +66,7 @@ class ActionCardAddItem extends StatelessWidget {
           ),
           const SizedBox(height: 17),
           SizedBox(
-            width: 350,
+            width: double.infinity,
             child: Center(
               child: ActionButton.instantiate(
                 viewModel: viewModel.addButton,

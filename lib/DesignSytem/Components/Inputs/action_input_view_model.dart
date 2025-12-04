@@ -11,6 +11,7 @@ enum ActionTypeInputFormatter {
   lettersAndDigits,
   decimal,       // aceita decimal sem limite de casas
   decimal2Fixed, // aceita até 2 casas decimais
+  currencyBRL,
   global, // aceita tudo
 }
 

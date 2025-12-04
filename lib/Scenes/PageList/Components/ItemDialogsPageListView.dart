@@ -41,7 +41,7 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     labelText: 'Valor',
     controller: valueController,
     keyboardType: TextInputType.number,
-    formatter: ActionTypeInputFormatter.decimal2Fixed,
+    formatter: ActionTypeInputFormatter.currencyBRL,
     borderColor: textDisabled,
     borderSize: 0.5,
   );
@@ -122,7 +122,7 @@ void showEditItemDialog(
     labelText: 'Valor',
     controller: valueController,
     keyboardType: TextInputType.number,
-    formatter: ActionTypeInputFormatter.decimal2Fixed,
+    formatter: ActionTypeInputFormatter.currencyBRL,
     borderColor: textDisabled,
     borderSize: 0.5,
   );

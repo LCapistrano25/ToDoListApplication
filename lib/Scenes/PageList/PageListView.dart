@@ -12,6 +12,7 @@ import 'package:arc_to_do_list/DesignSytem/Components/Buttons/FloatingButton/act
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/FloatingButton/action_floating_button_view_model.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/FloatingButtonHomeView.dart';
 import 'package:arc_to_do_list/Scenes/PageList/Components/ItemDialogsPageListView.dart';
+import 'package:arc_to_do_list/models/page_list_item.dart';
 
 class PageListView extends StatefulWidget {
   final PageListViewModel viewModel;
@@ -60,7 +61,7 @@ class _PageListViewState extends State<PageListView>
                   if (status == LoadStatus.error) {
                     return const Center(child: Text('Erro ao carregar'));
                   }
-                  return ValueListenableBuilder<List<Map<String, dynamic>>>(
+                  return ValueListenableBuilder<List<PageListItem>>(
                     valueListenable: widget.viewModel.items,
                     builder: (context, items, __) {
                       if (items.isEmpty) {
@@ -86,11 +87,11 @@ class _PageListViewState extends State<PageListView>
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = items[index];
-                          final id = item['id'] as int? ?? index;
-                          final title = item['title'] as String? ?? '';
-                          final type = item['type'] as String? ?? '';
-                          final quantity = item['quantity'] as int?;
-                          final value = item['value'] as String?;
+                          final id = item.id;
+                          final title = item.title;
+                          final type = item.type;
+                          final quantity = item.quantity;
+                          final value = item.value;
                           final vm = ActionCardItemInListViewModel(
                             id: id,
                             style: ActionCardItemInListStyle.primary,

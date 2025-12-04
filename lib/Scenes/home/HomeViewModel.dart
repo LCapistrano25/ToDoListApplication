@@ -1,6 +1,8 @@
 import 'package:arc_to_do_list/Scenes/home/HomeService.dart';
 import 'package:arc_to_do_list/resources/shared/AppCoordinator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:arc_to_do_list/models/list_summary.dart';
+import 'package:arc_to_do_list/models/list_type.dart';
 
 class HomeViewModel {
   final HomeService service;
@@ -10,7 +12,7 @@ class HomeViewModel {
   final String address;
 
   final ValueNotifier<LoadStatus> status = ValueNotifier(LoadStatus.idle);
-  final ValueNotifier<List<Map<String, dynamic>>> items = ValueNotifier([]);
+  final ValueNotifier<List<ListSummary>> items = ValueNotifier([]);
 
   HomeViewModel({
     required this.service,
@@ -19,7 +21,7 @@ class HomeViewModel {
     required this.address,
   });
 
-  final ValueNotifier<List<Map<String, dynamic>>> typeList = ValueNotifier([]);
+  final ValueNotifier<List<ListType>> typeList = ValueNotifier([]);
 
   Future<void> loadItems() async {
     status.value = LoadStatus.loading;

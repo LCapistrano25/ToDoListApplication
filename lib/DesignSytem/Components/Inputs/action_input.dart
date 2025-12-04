@@ -44,6 +44,13 @@ class _ActionInputState extends State<ActionInput> {
       widget.viewModel.onChanged?.call(text);
       widget.delegate?.onClick(widget.viewModel);
     });
+    if (widget.viewModel.formatter == ActionTypeInputFormatter.currencyBRL) {
+      final t = _controller.text;
+      if (t.isNotEmpty) {
+        final f = CurrencyBRLInputFormatter.formatFromText(t);
+        _controller.value = TextEditingValue(text: f, selection: TextSelection.collapsed(offset: f.length));
+      }
+    }
   }
 
   @override
@@ -107,6 +114,8 @@ class _ActionInputState extends State<ActionInput> {
         return [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))];
       case ActionTypeInputFormatter.decimal2Fixed:
         return [FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d{0,2})?'))];
+      case ActionTypeInputFormatter.currencyBRL:
+        return [CurrencyBRLInputFormatter()];
       case ActionTypeInputFormatter.global:
         return [];
     }
@@ -171,5 +180,39 @@ class _ActionInputState extends State<ActionInput> {
         ),
       ),
     );
+  }
+
+}
+
+class CurrencyBRLInputFormatter extends TextInputFormatter {
+  static String formatFromText(String input) {
+    final digits = input.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.isEmpty) return '';
+    final cents = int.parse(digits);
+    final intPart = cents ~/ 100;
+    final decPart = cents % 100;
+    final intStr = _groupThousands(intPart.toString());
+    final decStr = decPart.toString().padLeft(2, '0');
+    return 'R\$ ' + intStr + ',' + decStr;
+  }
+
+  static String _groupThousands(String s) {
+    final buffer = StringBuffer();
+    int count = 0;
+    for (int i = s.length - 1; i >= 0; i--) {
+      buffer.write(s[i]);
+      count++;
+      if (count == 3 && i != 0) {
+        buffer.write('.');
+        count = 0;
+      }
+    }
+    return String.fromCharCodes(buffer.toString().runes.toList().reversed);
+  }
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final formatted = formatFromText(newValue.text);
+    return TextEditingValue(text: formatted, selection: TextSelection.collapsed(offset: formatted.length));
   }
 }
