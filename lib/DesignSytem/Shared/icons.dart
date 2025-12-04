@@ -32,4 +32,6 @@ class AppIcons {
   static const IconData delete = Icons.delete_outlined;
 
   static const IconData logout = Icons.logout_outlined;
+
+  static const IconData refresh = Icons.refresh_outlined;
 }

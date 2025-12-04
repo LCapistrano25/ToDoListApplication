@@ -140,7 +140,7 @@ class _CardAddItemDelegate implements ActionButtonDelegate {
   const _CardAddItemDelegate({this.onPressed});
 
   @override
-  void onClick(ActionButtonViewModel viewModel) {
+  void onActionButtonClick(ActionButtonViewModel viewModel) {
     onPressed?.call();
   }
 }

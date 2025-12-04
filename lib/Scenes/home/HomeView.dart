@@ -1,7 +1,11 @@
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/IconButton/action_icon_button.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/IconButton/action_icon_button_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Buttons/action_button_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Sidebar/action_sidebar.dart';
@@ -23,7 +27,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> 
-implements ActionIconButtonDelegate, ActionSidebarDelegate {
+implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionButtonDelegate {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   
@@ -39,6 +43,9 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
       key: _scaffoldKey,
       appBar: AppBar(
         leading: menuIconButton(this),
+        actions: [
+          refreshIconButton(this),
+        ],
         centerTitle: true, // Adicionado para centralizar o título
         title: Text("To Do List", style: poppinsRegular20),
       ),
@@ -113,15 +120,34 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
                 },
               ),
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
+      floatingActionButton: addButton(this),
     );
   }
 
   @override
   void onClick(ActionIconButtonViewModel viewModel) {
-    _scaffoldKey.currentState?.openDrawer();
+    if (viewModel.icon == AppIcons.menu) {
+      _scaffoldKey.currentState?.openDrawer();
+      return;
+    }
+
+    if (viewModel.icon == AppIcons.refresh) {
+      widget.viewModel.loadItems();
+      return;
+    }
+  }
+
+  void onActionButtonClick(ActionButtonViewModel viewModel) {
+    if (viewModel.icon == AppIcons.add) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ação: Adicionar (Button)')),
+      );
+      return;
+    }
   }
 
   @override
@@ -143,7 +169,16 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
 ActionIconButton menuIconButton(ActionIconButtonDelegate delegate) {
   final ActionIconButtonViewModel viewModel = ActionIconButtonViewModel(
     icon: AppIcons.menu,
-    color: black
+    color: black,
+    size: 30,
+  );
+  return ActionIconButton.initialize(viewModel: viewModel, delegate: delegate);
+}
+
+ActionIconButton refreshIconButton(ActionIconButtonDelegate delegate) {
+  final ActionIconButtonViewModel viewModel = const ActionIconButtonViewModel(
+    icon: AppIcons.refresh,
+    size: 30,
   );
   return ActionIconButton.initialize(viewModel: viewModel, delegate: delegate);
 }
@@ -215,3 +250,18 @@ ActionLoad showLoading() {
     final vm = ActionLoadViewModel(4, 48, ActionLoadType.primary);
     return ActionLoad.initialize(viewModel: vm);
   }
+
+Widget addButton(ActionButtonDelegate delegate) {
+  final ActionButtonViewModel viewModel = ActionButtonViewModel(
+    style: ActionButtonStyle.primary,
+    size: ActionButtonSize.iconOnlyLarge,
+    icon: AppIcons.add,
+    iconColor: Colors.white,
+  );
+  return FloatingActionButton(
+    onPressed: () => delegate.onActionButtonClick(viewModel),
+    backgroundColor: primaryColor,
+    child: Icon(viewModel.icon, color: viewModel.iconColor),
+  );
+}
+

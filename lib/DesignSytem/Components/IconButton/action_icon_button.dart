@@ -27,7 +27,8 @@ class ActionIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(viewModel.icon, size: viewModel.size),
+      iconSize: viewModel.size,
+      icon: Icon(viewModel.icon),
       color: viewModel.color,
       onPressed: () {
         delegate?.onClick(viewModel);

@@ -4,7 +4,7 @@ import 'package:arc_to_do_list/DesignSytem/Shared/styles.dart';
 import 'package:flutter/material.dart';
 
 abstract class ActionButtonDelegate {
-  void onClick(ActionButtonViewModel viewModel);
+  void onActionButtonClick(ActionButtonViewModel viewModel);
 }
 
 class ActionButton extends StatelessWidget {
@@ -233,7 +233,7 @@ class ActionButton extends StatelessWidget {
     }
 
     return ElevatedButton(
-      onPressed: _isDisabled ? null : () => delegate?.onClick(viewModel),
+      onPressed: _isDisabled ? null : () => delegate?.onActionButtonClick(viewModel),
       style: ElevatedButton.styleFrom(
         elevation: 0,
         shadowColor: Colors.transparent,

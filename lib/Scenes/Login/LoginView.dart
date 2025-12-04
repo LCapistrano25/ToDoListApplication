@@ -86,7 +86,7 @@ class _LoginViewState extends State<LoginView>
   }
 
   @override
-  void onClick(ActionButtonViewModel vm) {
+  void onActionButtonClick(ActionButtonViewModel vm) {
     if (_isLoading) return;
     final user = usernameVM.controller?.text ?? '';
     final pass = passwordVM.controller?.text ?? '';
