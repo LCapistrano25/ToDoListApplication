@@ -10,7 +10,7 @@ class ActionDropdownViewModel<T> {
 
   final List<DropdownMenuItem<T>> items;
   final T? value;
-
+  
   final String? hintText;
   final String? labelText;
   final String? helperText;
@@ -28,6 +28,7 @@ class ActionDropdownViewModel<T> {
   final Color? borderColor;
   final Color? textColor;
   final Color? iconColor;
+  final double? borderSize;
 
   /// 🔹 Nova propriedade para controlar a cor do menu suspenso
   final Color? dropdownColor;
@@ -49,6 +50,7 @@ class ActionDropdownViewModel<T> {
     this.borderColor,
     this.textColor,
     this.iconColor,
+    this.borderSize,
     this.dropdownColor,
   });
 }

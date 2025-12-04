@@ -1,8 +1,7 @@
+import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
 
-import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list_view_model.dart';
-
-ActionCardItemList cardItemList({required String title, required String type}) {
+ActionCardItemList cardItemList({required String title, required String type, ActionCardItemListDelegate? delegate}) {
  ActionCardItemListStyle style = ActionCardItemListStyle.primary;
 
   final ActionCardItemListViewModel viewModel = ActionCardItemListViewModel(
@@ -11,5 +10,5 @@ ActionCardItemList cardItemList({required String title, required String type}) {
     type: type,
   );
 
-  return ActionCardItemList.instantiate(viewModel: viewModel);
+  return ActionCardItemList.instantiate(viewModel: viewModel, delegate: delegate);
 }

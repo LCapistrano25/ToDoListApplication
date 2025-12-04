@@ -19,6 +19,8 @@ class HomeViewModel {
     required this.address,
   });
 
+  final ValueNotifier<List<Map<String, dynamic>>> typeList = ValueNotifier([]);
+
   Future<void> loadItems() async {
     status.value = LoadStatus.loading;
     try {
@@ -33,6 +35,24 @@ class HomeViewModel {
       status.value = LoadStatus.error;
     }
   }
+
+  Future<void> loadTypeList() async {
+    try {
+      final data = await service.fetchTypeList();
+      typeList.value = data;
+    } catch (_) {
+      status.value = LoadStatus.error;
+    }
+  }
+
+  Future<void> createItem({required String title, required String type}) async {
+    try {
+      await service.createItem(title: title, type: type);
+      loadItems();
+    } catch (_) {
+      status.value = LoadStatus.error;
+    }
+  } 
 }
 
 enum LoadStatus { idle, loading, success, empty, error }

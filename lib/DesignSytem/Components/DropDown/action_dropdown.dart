@@ -38,7 +38,7 @@ class ActionDropdown<T> extends StatelessWidget {
     }
     return BorderSide(
       color: viewModel.borderColor ?? color,
-      width: 1.5,
+      width: viewModel.borderSize ?? 1.5,
     );
   }
 
@@ -89,7 +89,7 @@ class ActionDropdown<T> extends StatelessWidget {
         labelText: viewModel.labelText,
         labelStyle: TextStyle(color: _getTextColor()),
         floatingLabelStyle: TextStyle(color: _getTextColor()),
-
+      
         hintText: viewModel.hintText,
         hintStyle: TextStyle(color: _getHintColor()),
 

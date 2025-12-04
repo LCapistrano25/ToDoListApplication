@@ -9,53 +9,50 @@ import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
 import 'package:flutter/material.dart';
 
-class CardAddItem extends StatelessWidget {
-  final CardAddItemViewModel viewModel;
+class ActionCardAddItem extends StatelessWidget {
+  final ActionCardAddItemViewModel viewModel;
 
-  const CardAddItem({
+  const ActionCardAddItem({
     super.key,
     required this.viewModel,
   });
 
   /// Factory padrão para criação do Card (seguindo o padrão dos outros componentes)
   static Widget instantiate({
-    required CardAddItemStyle style,
+    ActionCardAddItemViewModel? viewModel,
+    ActionCardAddItemStyle? style,
     VoidCallback? onAddPressed,
   }) {
-    final isSecondary = style == CardAddItemStyle.secondary;
+    final isSecondary = style == ActionCardAddItemStyle.secondary;
 
-    final viewModel = CardAddItemViewModel(
-      style: style,
+    final viewModel = ActionCardAddItemViewModel(
+      style: style ?? ActionCardAddItemStyle.primary,
       onAddPressed: onAddPressed,
       nameInput: ActionInputViewModel(
         labelText: 'Nome item',
-        style:
-            ActionInputStyle.primary,
-        borderColor: isSecondary
-            ? brandWhite
-            : textSecondary,
+        style: ActionInputStyle.primary,
+        borderColor: isSecondary ? brandWhite : textDisabled,
+      ),
+      quantityInput: ActionInputViewModel(
+        labelText: 'Quantidade',
+        style: ActionInputStyle.primary,
+        keyboardType: TextInputType.number,
+        formatter: ActionTypeInputFormatter.digitsOnly,
+        borderColor: isSecondary ? brandWhite : textDisabled,
       ),
       typeDropdown: ActionDropdownViewModel<String>(
         labelText: 'Tipo de Item',
-        style: 
-            ActionDropdownStyle.primary,
+        style: ActionDropdownStyle.primary,
         items: [],
-        borderColor: isSecondary
-            ? brandWhite
-            : textSecondary,
+        borderColor: isSecondary ? brandWhite : textDisabled,
       ),
       valueInput: ActionInputViewModel(
         labelText: 'Valor',
         prefixIcon: AppIcons.dollar,
         formatter: ActionTypeInputFormatter.decimal2Fixed,
-        style:
-             ActionInputStyle.primary,
-        borderColor: isSecondary
-            ? brandWhite
-            : textSecondary,
-        iconColor: isSecondary
-            ? black
-            : textSecondary,
+        style: ActionInputStyle.primary,
+        borderColor: isSecondary ? brandWhite : textDisabled,
+        iconColor: isSecondary ? black : textSecondary,
       ),
       addButton: ActionButtonViewModel(
         text: 'Adicionar',
@@ -63,68 +60,63 @@ class CardAddItem extends StatelessWidget {
         style: isSecondary
             ? ActionButtonStyle.secondary
             : ActionButtonStyle.primary,
-        size: ActionButtonSize.large,
+        size: ActionButtonSize.medium,
       ),
     );
 
-    return CardAddItem(viewModel: viewModel);
+    return ActionCardAddItem(viewModel: viewModel);
   }
 
   @override
   Widget build(BuildContext context) {
-    final isSecondary = viewModel.style == CardAddItemStyle.secondary;
+    final isSecondary = viewModel.style == ActionCardAddItemStyle.secondary;
 
     return Container(
-      width: 600,
-      padding: const EdgeInsets.all(24),
+      width: 416,
+      padding: const EdgeInsets.all(31),
       decoration: BoxDecoration(
         color: isSecondary ? alternativeColor : brandWhite,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // ajusta ao conteúdo interno
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Título
           Text(
             'Adicionar item',
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: isSecondary ? brandWhite : textSecondary,
+              color: Colors.black,
+              fontSize: 24,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              height: 1.20,
             ),
           ),
-
-          const SizedBox(height: 24),
-
-          // Campo: Nome do item
-          ActionInput.instantiate(viewModel: viewModel.nameInput),
-
-          const SizedBox(height: 16),
-
-          // Campo: Tipo de item
-          ActionDropdown.instantiate(viewModel: viewModel.typeDropdown),
-
-          const SizedBox(height: 16),
-
-          // Campo: Valor
-          ActionInput.instantiate(viewModel: viewModel.valueInput),
-
-          const SizedBox(height: 24),
-
-          // Botão: Adicionar
-          Center(
-            child: ActionButton.instantiate(
-              viewModel: viewModel.addButton,
-              delegate: _CardAddItemDelegate(
-                onPressed: viewModel.onAddPressed,
+          const SizedBox(height: 17),
+          SizedBox(
+            width: 350,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ActionInput.instantiate(viewModel: viewModel.nameInput),
+                const SizedBox(height: 15),
+                ActionInput.instantiate(viewModel: viewModel.quantityInput),
+                const SizedBox(height: 15),
+                ActionDropdown.instantiate(viewModel: viewModel.typeDropdown),
+                const SizedBox(height: 15),
+                ActionInput.instantiate(viewModel: viewModel.valueInput),
+              ],
+            ),
+          ),
+          const SizedBox(height: 17),
+          SizedBox(
+            width: 350,
+            child: Center(
+              child: ActionButton.instantiate(
+                viewModel: viewModel.addButton,
+                delegate: _ActionCardAddItemDelegate(
+                  onPressed: viewModel.onAddPressed,
+                ),
               ),
             ),
           ),
@@ -134,10 +126,10 @@ class CardAddItem extends StatelessWidget {
   }
 }
 
-class _CardAddItemDelegate implements ActionButtonDelegate {
+class _ActionCardAddItemDelegate implements ActionButtonDelegate {
   final VoidCallback? onPressed;
 
-  const _CardAddItemDelegate({this.onPressed});
+  const _ActionCardAddItemDelegate({this.onPressed});
 
   @override
   void onActionButtonClick(ActionButtonViewModel viewModel) {

@@ -1,6 +1,7 @@
 
 import 'package:arc_to_do_list/Scenes/Login/LoginFactory.dart';
 import 'package:arc_to_do_list/Scenes/Home/HomeFactory.dart';
+import 'package:arc_to_do_list/Scenes/PageList/PageListFactory.dart';
 import 'package:flutter/material.dart';
 
 class AppCoordinator {
@@ -22,5 +23,10 @@ class AppCoordinator {
   void goToLogin() {
     final login = LoginFactory.make(coordinator: this);
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => login));
+  }
+
+  void goToPageList({required String title, required String type}) {
+    final page = PageListFactory.make(coordinator: this, title: title, type: type);
+    navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => page));
   }
 }

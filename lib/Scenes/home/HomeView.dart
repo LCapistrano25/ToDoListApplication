@@ -8,7 +8,10 @@ import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/styles.dart';
+import 'package:arc_to_do_list/Scenes/Home/Components/ActionCreateList.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/CardItemListHomeView.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/FloatingButtonHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/IconButtonHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/LoadHomeView.dart';
@@ -16,9 +19,15 @@ import 'package:arc_to_do_list/Scenes/Home/Components/SidebarHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/HomeViewModel.dart';
 import 'package:flutter/material.dart';
 
+enum HomeViewIndex {
+  items,
+  createList,
+  archive,
+  logout,
+}
+
 class HomeView extends StatefulWidget {
   final HomeViewModel viewModel;
-
   const HomeView({super.key, required this.viewModel});
 
   @override
@@ -26,14 +35,28 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> 
-implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButtonDelegate {
+implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButtonDelegate, ActionCardItemListDelegate {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
+  List<Map<String, dynamic>> items = [];
+  List<String> typeList = [];
   
   @override
   void initState() {
     super.initState();
+    widget.viewModel.loadTypeList();
     widget.viewModel.loadItems();
+
+    widget.viewModel.items.addListener(() {
+      setState(() {
+        items = widget.viewModel.items.value;
+      });
+    });
+    widget.viewModel.typeList.addListener(() {
+      setState(() {
+        typeList = widget.viewModel.typeList.value.map((e) => e['type'] as String).toList();
+      });
+    });
   }
   
   @override
@@ -65,44 +88,11 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
                   if (status == LoadStatus.error) {
                     return const Center(child: Text('Erro ao carregar'));
                   }
-                  if (status == LoadStatus.empty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 36),
-                        child: Text(
-                          'Minha lista de tarefas é igual a Wi-Fi de vizinho: sempre aparece cheia, mas quase nunca funciona.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: textSecondary,
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            height: 1.40,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
                   return ValueListenableBuilder<List<Map<String, dynamic>>>(
                     valueListenable: widget.viewModel.items,
                     builder: (context, items, __) {
                       if (items.isEmpty) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: Text(
-                              'Minha lista de tarefas é igual a Wi-Fi de vizinho: sempre aparece cheia, mas quase nunca funciona.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: const Color(0xFF7E8392),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                height: 1.40,
-                              ),
-                            ),
-                          ),
-                        );
+                        return listEmpty();
                       }
                       return ListView.separated(
                         itemCount: items.length,
@@ -111,7 +101,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
                           final item = items[index];
                           final title = item['title'] as String? ?? '';
                           final type = item['list_type'] as String? ?? '';
-                          return cardItemList(title: title, type: type);
+                          return cardItemList(title: title, type: type, delegate: this);
                         },
                       );
                     },
@@ -143,11 +133,21 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
   @override
   void onActionFloatingButtonClick(ActionFloatingButtonViewModel viewModel) {
     if (viewModel.icon == AppIcons.add) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ação: Adicionar (Floating Button)')),
+      popUpList(
+        context: context,
+        onCreate: (title, type) {
+          widget.viewModel.createItem(title: title, type: type);
+        },
+        onCancel: () {},
+        typeItems: typeList,
       );
       return;
     }
+  }
+
+  @override
+  void onTap(ActionCardItemListViewModel viewModel) {
+    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type);
   }
 
   @override
@@ -156,7 +156,27 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
       _selectedIndex = item.index;
     });
 
-    if (item.index == 3) {
+    if (item.index == HomeViewIndex.items.index) {
+      widget.viewModel.loadItems();
+      return;
+    }
+
+    if (item.index == HomeViewIndex.createList.index) {
+      widget.viewModel.loadTypeList();
+      _scaffoldKey.currentState?.closeDrawer();
+      _selectedIndex = 0;
+      popUpList(
+        context: context,
+        onCreate: (title, type) {
+          widget.viewModel.createItem(title: title, type: type);
+        },
+        onCancel: () {},
+        typeItems: typeList,
+      );
+      return;
+    }
+
+    if (item.index == HomeViewIndex.logout.index) {
       Navigator.pop(context);
       widget.viewModel.coordinator.goToLogin();
       return;
@@ -164,4 +184,23 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
 
     Navigator.pop(context);
   }
+}
+
+Widget listEmpty() {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 36),
+      child: Text(
+        'Minha lista de tarefas é igual a Wi-Fi de vizinho: sempre aparece cheia, mas quase nunca funciona.',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: textSecondary,
+          fontSize: 16,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w500,
+          height: 1.40,
+        ),
+      ),
+    ),
+  );
 }

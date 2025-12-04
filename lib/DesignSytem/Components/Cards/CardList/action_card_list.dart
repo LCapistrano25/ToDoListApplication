@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
 
 abstract class ActionCardItemListDelegate {
   void onTap(ActionCardItemListViewModel viewModel);
