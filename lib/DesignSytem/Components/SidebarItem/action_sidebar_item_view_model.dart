@@ -5,6 +5,7 @@ enum ActionSidebarItemStyle {
   primary,
   secundary
 }
+
 class ActionSidebarItemViewModel {
   final ActionSidebarItemStyle style;
   final String label;
@@ -12,7 +13,6 @@ class ActionSidebarItemViewModel {
   final int index;
   final ActionSidebarDelegate? delegate;
   final bool isSelected;
-
 
   const ActionSidebarItemViewModel({
     required this.style,
@@ -23,7 +23,6 @@ class ActionSidebarItemViewModel {
     this.isSelected = false,
   });
 
-  /// Retorna uma cópia atualizada (copyWith pattern)
   ActionSidebarItemViewModel copyWith({
     ActionSidebarItemStyle? style,
     String? label,

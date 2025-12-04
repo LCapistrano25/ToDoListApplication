@@ -23,14 +23,27 @@ class _LoginViewState extends State<LoginView>
   late final ActionInputViewModel usernameVM;
   late final ActionInputViewModel passwordVM;
   bool _isLoading = false;
+  bool _canSubmit = false;
 
   @override
   void initState() {
     super.initState();
 
-    // ViewModels vindos de funções externas
-    usernameVM = buildUsernameViewModel();
-    passwordVM = buildPasswordViewModel();
+    // ViewModels com callbacks de mudança para validar e habilitar/desabilitar o botão
+    void syncValidity() {
+      final user = usernameVM.controller?.text.trim() ?? '';
+      final pass = passwordVM.controller?.text.trim() ?? '';
+      final next = user.isNotEmpty && pass.isNotEmpty;
+      if (next != _canSubmit) {
+        setState(() { _canSubmit = next; });
+      }
+    }
+
+    usernameVM = buildUsernameViewModel(onChanged: (_) => syncValidity());
+    passwordVM = buildPasswordViewModel(onChanged: (_) => syncValidity());
+
+    // Valida estado inicial
+    syncValidity();
   }
 
   ActionInput get username => ActionInput.instantiate(viewModel: usernameVM);
@@ -58,11 +71,18 @@ class _LoginViewState extends State<LoginView>
             password,
             const SizedBox(height: 16),
 
-            buildLoginButton(delegate: this, enabled: !_isLoading),
+            buildLoginButton(delegate: this, enabled: !_isLoading && _canSubmit),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    usernameVM.controller?.dispose();
+    passwordVM.controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,22 +117,24 @@ class _LoginViewState extends State<LoginView>
   }
 }
 
-ActionInputViewModel buildUsernameViewModel() {
+ActionInputViewModel buildUsernameViewModel({ValueChanged<String>? onChanged}) {
   return ActionInputViewModel(
     style: ActionInputStyle.primary,
     hintText: 'Usuário',
     controller: TextEditingController(),
     maxLength: 20,
+    onChanged: onChanged,
   );
 }
 
-ActionInputViewModel buildPasswordViewModel() {
+ActionInputViewModel buildPasswordViewModel({ValueChanged<String>? onChanged}) {
   return ActionInputViewModel(
     style: ActionInputStyle.primary,
     hintText: 'Senha',
     obscureText: true,
     controller: TextEditingController(),
     maxLength: 15,
+    onChanged: onChanged,
   );
 }
 

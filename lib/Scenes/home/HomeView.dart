@@ -2,6 +2,8 @@ import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_i
 import 'package:arc_to_do_list/DesignSytem/Components/CardItemList/action_card_item_list_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/IconButton/action_icon_button.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/IconButton/action_icon_button_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Loads/action_load_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Sidebar/action_sidebar.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Sidebar/action_sidebar_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
@@ -52,16 +54,49 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
                 valueListenable: widget.viewModel.status,
                 builder: (context, status, _) {
                   if (status == LoadStatus.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: showLoading());
                   }
                   if (status == LoadStatus.error) {
                     return const Center(child: Text('Erro ao carregar'));
+                  }
+                  if (status == LoadStatus.empty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 36),
+                        child: Text(
+                          'Minha lista de tarefas é igual a Wi-Fi de vizinho: sempre aparece cheia, mas quase nunca funciona.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: textSecondary,
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            height: 1.40,
+                          ),
+                        ),
+                      ),
+                    );
                   }
                   return ValueListenableBuilder<List<Map<String, dynamic>>>(
                     valueListenable: widget.viewModel.items,
                     builder: (context, items, __) {
                       if (items.isEmpty) {
-                        return const Center(child: Text('Nenhuma lista'));
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              'Minha lista de tarefas é igual a Wi-Fi de vizinho: sempre aparece cheia, mas quase nunca funciona.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color(0xFF7E8392),
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                                height: 1.40,
+                              ),
+                            ),
+                          ),
+                        );
                       }
                       return ListView.separated(
                         itemCount: items.length,
@@ -94,6 +129,13 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate {
     setState(() {
       _selectedIndex = item.index;
     });
+
+    if (item.index == 3) {
+      Navigator.pop(context);
+      widget.viewModel.coordinator.goToLogin();
+      return;
+    }
+
     Navigator.pop(context);
   }
 }
@@ -168,3 +210,8 @@ ActionCardItemList cardItemList({required String title, required String type}) {
 
   return ActionCardItemList.instantiate(viewModel: viewModel);
 }
+
+ActionLoad showLoading() {
+    final vm = ActionLoadViewModel(4, 48, ActionLoadType.primary);
+    return ActionLoad.initialize(viewModel: vm);
+  }

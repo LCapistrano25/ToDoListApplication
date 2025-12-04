@@ -18,4 +18,9 @@ class AppCoordinator {
     final home = HomeFactory.make(coordinator: this, name: name, address: address);
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => home ));
   }
+
+  void goToLogin() {
+    final login = LoginFactory.make(coordinator: this);
+    navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => login));
+  }
 }

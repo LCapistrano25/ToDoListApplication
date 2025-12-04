@@ -94,7 +94,7 @@ class ActionCardItemList extends StatelessWidget {
                             viewModel.title,
                             style: TextStyle(
                               color: _getTitleColor(),
-                              fontSize: 24,
+                              fontSize: 20,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               height: 1.20,

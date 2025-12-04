@@ -24,11 +24,15 @@ class HomeViewModel {
     try {
       final data = await service.fetchItemList();
       items.value = data;
-      status.value = LoadStatus.success;
+      if (data.isEmpty) {
+        status.value = LoadStatus.empty;
+      } else {
+        status.value = LoadStatus.success;
+      }
     } catch (_) {
       status.value = LoadStatus.error;
     }
   }
 }
 
-enum LoadStatus { idle, loading, success, error }
+enum LoadStatus { idle, loading, success, empty, error }

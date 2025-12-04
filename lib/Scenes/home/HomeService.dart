@@ -3,7 +3,8 @@ class HomeService {
     await Future.delayed(const Duration(seconds: 3));
     return [
       {'title': 'Mercado', 'list_type': 'Lista de Compras'},
-      {'title': 'Tarefas', 'list_type': 'Lista de Tarefas'}
+      {'title': 'Tarefas', 'list_type': 'Lista de Tarefas'},
+      {'title': 'Construção', 'list_type': 'Lista de Construção'},
     ];
   }
 

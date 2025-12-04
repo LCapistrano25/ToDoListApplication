@@ -1,6 +1,10 @@
-import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart'; // suas cores
+import 'package:arc_to_do_list/DesignSytem/Components/SidebarItem/action_sidebar_item_view_model.dart';
+
+abstract class ActionSidebarItemDelegate {
+  void onTap(ActionSidebarItemViewModel viewModel);
+}
 
 class ActionSidebarItem extends StatelessWidget {
   final ActionSidebarItemViewModel viewModel;
