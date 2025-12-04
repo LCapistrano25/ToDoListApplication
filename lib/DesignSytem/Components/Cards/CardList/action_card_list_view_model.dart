@@ -15,6 +15,7 @@ class ActionCardItemListViewModel {
   final Color? backgroundColor;
   final Color? titleColor;
   final Color? subtitleColor;
+  final IconData? deleteIcon;
 
   const ActionCardItemListViewModel({
     required this.id,
@@ -26,5 +27,6 @@ class ActionCardItemListViewModel {
     this.backgroundColor,
     this.titleColor,
     this.subtitleColor,
+    this.deleteIcon,
   });
 }

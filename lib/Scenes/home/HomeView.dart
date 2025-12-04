@@ -153,7 +153,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
     final types = widget.viewModel.typeList.value;
     final match = types.firstWhere(
       (t) => t.type == viewModel.type,
-      orElse: () => ListType(type: viewModel.type, isCurrency: false),
+      orElse: () => ListType(id: 0, type: viewModel.type, isCurrency: false),
     );
     widget.viewModel.coordinator.goToPageList(
       title: viewModel.title,
@@ -161,6 +161,11 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
       idList: viewModel.id,
       isCurrency: match.isCurrency,
     );
+  }
+
+  @override
+  void onDelete(ActionCardItemListViewModel viewModel) {
+    widget.viewModel.deleteItem(id: viewModel.id);
   }
 
   @override

@@ -55,6 +55,15 @@ class HomeViewModel {
       status.value = LoadStatus.error;
     }
   } 
+
+  Future<void> deleteItem({required int id}) async {
+    try {
+      await service.deleteItem(id: id);
+      loadItems();
+    } catch (_) {
+      status.value = LoadStatus.error;
+    }
+  }
 }
 
 enum LoadStatus { idle, loading, success, empty, error }

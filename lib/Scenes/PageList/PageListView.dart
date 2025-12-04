@@ -137,7 +137,13 @@ class _PageListViewState extends State<PageListView>
   }
 
   void _performDeleteByViewModel(ActionCardItemInListViewModel viewModel) {
-    widget.viewModel.deleteItem(itemId: viewModel.id);
+    showConfirmDeleteItemDialog(
+      context,
+      onConfirm: () {
+        widget.viewModel.deleteItem(itemId: viewModel.id);
+      },
+      itemTitle: viewModel.title,
+    );
   }
 
   void _performEditByViewModel(ActionCardItemInListViewModel viewModel) {

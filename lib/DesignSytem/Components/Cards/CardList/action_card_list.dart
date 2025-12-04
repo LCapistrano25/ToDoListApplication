@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
 
 abstract class ActionCardItemListDelegate {
   void onTap(ActionCardItemListViewModel viewModel);
+  void onDelete(ActionCardItemListViewModel viewModel);
 }
 
 class ActionCardItemList extends StatelessWidget {
@@ -120,6 +124,29 @@ class ActionCardItemList extends StatelessWidget {
               ),
             ),
           ),
+          if (viewModel.deleteIcon != null)
+            Positioned(
+              right: 12,
+              top: 12,
+              child: IconButton(
+                icon: Icon(viewModel.deleteIcon, size: 20, color: destructiveColor),
+                onPressed: delegate == null
+                    ? null
+                    : () {
+                        final vm = ActionConfirmDeleteDialogViewModel(
+                          message: 'Deseja realmente excluir "${viewModel.title}"? Esta ação não pode ser desfeita.',
+                        );
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => ActionConfirmDeleteDialog.instantiate(
+                            viewModel: vm,
+                            onConfirm: () => delegate!.onDelete(viewModel),
+                            onCancel: () {},
+                          ),
+                        );
+                      },
+              ),
+            ),
         ],
       ),
     );

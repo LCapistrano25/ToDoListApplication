@@ -1,5 +1,6 @@
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardList/action_card_list_view_model.dart';
+import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
 
 ActionCardItemList cardItemList({required int id, required String title, required String type, ActionCardItemListDelegate? delegate}) {
  ActionCardItemListStyle style = ActionCardItemListStyle.primary;
@@ -9,6 +10,7 @@ ActionCardItemList cardItemList({required int id, required String title, require
     style: style,
     title: title,
     type: type,
+    deleteIcon: AppIcons.delete,
   );
 
   return ActionCardItemList.instantiate(viewModel: viewModel, delegate: delegate);

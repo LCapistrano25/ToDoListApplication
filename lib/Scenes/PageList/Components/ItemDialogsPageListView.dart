@@ -7,6 +7,8 @@ import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item_view_model.dart';
 import 'package:arc_to_do_list/Scenes/PageList/PageListViewModel.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog.dart';
+import 'package:arc_to_do_list/DesignSytem/Components/Dialogs/action_confirm_delete_dialog_view_model.dart';
 
 void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
 
@@ -196,6 +198,29 @@ void showEditItemDialog(
         padding: const EdgeInsets.all(16),
         child: ActionCardAddItem.instantiate(viewModel: cardVM),
       ),
+    ),
+  );
+}
+
+void showConfirmDeleteItemDialog(
+  BuildContext context,
+  {
+    required VoidCallback onConfirm,
+    String? itemTitle,
+  }
+) {
+  final vm = ActionConfirmDeleteDialogViewModel(
+    message: itemTitle == null || itemTitle.isEmpty
+        ? 'Deseja realmente excluir este item? Esta ação não pode ser desfeita.'
+        : 'Deseja realmente excluir "$itemTitle"? Esta ação não pode ser desfeita.',
+  );
+
+  showDialog<void>(
+    context: context,
+    builder: (_) => ActionConfirmDeleteDialog.instantiate(
+      viewModel: vm,
+      onConfirm: onConfirm,
+      onCancel: () {},
     ),
   );
 }
