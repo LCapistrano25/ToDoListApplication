@@ -16,7 +16,7 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     labelText: 'Nome item',
     controller: nameController,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final quantityVM = ActionInputViewModel(
     style: ActionInputStyle.primary,
@@ -25,12 +25,12 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     keyboardType: TextInputType.number,
     formatter: ActionTypeInputFormatter.digitsOnly,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final typeVM = ActionDropdownViewModel<String>(
     style: ActionDropdownStyle.primary,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
     labelText: 'Tipo de Item',
     items: [DropdownMenuItem<String>(value: viewModel.type, child: Text(viewModel.type))],
     value: viewModel.type,
@@ -43,7 +43,7 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     keyboardType: TextInputType.number,
     formatter: ActionTypeInputFormatter.decimal2Fixed,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final addBtnVM = ActionButtonViewModel(
     size: ActionButtonSize.medium,
@@ -84,7 +84,7 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
 void showEditItemDialog(
   BuildContext context,
   PageListViewModel viewModel, {
-  required int index,
+  required int itemId,
   required String currentTitle,
   int? currentQuantity,
   String? currentValue,
@@ -97,7 +97,7 @@ void showEditItemDialog(
     labelText: 'Nome item',
     controller: nameController,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final quantityVM = ActionInputViewModel(
     style: ActionInputStyle.primary,
@@ -106,12 +106,12 @@ void showEditItemDialog(
     keyboardType: TextInputType.number,
     formatter: ActionTypeInputFormatter.digitsOnly,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final typeVM = ActionDropdownViewModel<String>(
     style: ActionDropdownStyle.primary,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
     labelText: 'Tipo de Item',
     items: [DropdownMenuItem<String>(value: viewModel.type, child: Text(viewModel.type))],
     value: viewModel.type,
@@ -124,7 +124,7 @@ void showEditItemDialog(
     keyboardType: TextInputType.number,
     formatter: ActionTypeInputFormatter.decimal2Fixed,
     borderColor: textDisabled,
-    borderSize: 1.0,
+    borderSize: 0.5,
   );
   final saveBtnVM = ActionButtonViewModel(
     size: ActionButtonSize.medium,
@@ -145,7 +145,7 @@ void showEditItemDialog(
       final value = valueController.text.trim();
       if (title.isEmpty) return;
       final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
-      viewModel.updateItem(index: index, itemTitle: title, quantity: qty, value: value.isEmpty ? null : value);
+      viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: value.isEmpty ? null : value);
       Navigator.of(context).pop();
     },
   );

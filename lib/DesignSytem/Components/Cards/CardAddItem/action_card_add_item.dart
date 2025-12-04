@@ -2,11 +2,8 @@ import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/acti
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input_view_model.dart';
 import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
-import 'package:arc_to_do_list/DesignSytem/Shared/icons.dart';
 import 'package:flutter/material.dart';
 
 class ActionCardAddItem extends StatelessWidget {
@@ -19,51 +16,10 @@ class ActionCardAddItem extends StatelessWidget {
 
   /// Factory padrão para criação do Card (seguindo o padrão dos outros componentes)
   static Widget instantiate({
-    ActionCardAddItemViewModel? viewModel,
+    required ActionCardAddItemViewModel viewModel,
     ActionCardAddItemStyle? style,
     VoidCallback? onAddPressed,
   }) {
-    final isSecondary = style == ActionCardAddItemStyle.secondary;
-
-    final viewModel = ActionCardAddItemViewModel(
-      style: style ?? ActionCardAddItemStyle.primary,
-      onAddPressed: onAddPressed,
-      nameInput: ActionInputViewModel(
-        labelText: 'Nome item',
-        style: ActionInputStyle.primary,
-        borderColor: isSecondary ? brandWhite : textDisabled,
-      ),
-      quantityInput: ActionInputViewModel(
-        labelText: 'Quantidade',
-        style: ActionInputStyle.primary,
-        keyboardType: TextInputType.number,
-        formatter: ActionTypeInputFormatter.digitsOnly,
-        borderColor: isSecondary ? brandWhite : textDisabled,
-      ),
-      typeDropdown: ActionDropdownViewModel<String>(
-        labelText: 'Tipo de Item',
-        style: ActionDropdownStyle.primary,
-        items: [],
-        borderColor: isSecondary ? brandWhite : textDisabled,
-      ),
-      valueInput: ActionInputViewModel(
-        labelText: 'Valor',
-        prefixIcon: AppIcons.dollar,
-        formatter: ActionTypeInputFormatter.decimal2Fixed,
-        style: ActionInputStyle.primary,
-        borderColor: isSecondary ? brandWhite : textDisabled,
-        iconColor: isSecondary ? black : textSecondary,
-      ),
-      addButton: ActionButtonViewModel(
-        text: 'Adicionar',
-        textColor: brandWhite,
-        style: isSecondary
-            ? ActionButtonStyle.secondary
-            : ActionButtonStyle.primary,
-        size: ActionButtonSize.medium,
-      ),
-    );
-
     return ActionCardAddItem(viewModel: viewModel);
   }
 

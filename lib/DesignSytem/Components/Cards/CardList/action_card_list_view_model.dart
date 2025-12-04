@@ -6,6 +6,7 @@ enum ActionCardItemListStyle {
 }
 
 class ActionCardItemListViewModel {
+  final int id;
   final ActionCardItemListStyle style;
   final String title;
   final String type;
@@ -16,6 +17,7 @@ class ActionCardItemListViewModel {
   final Color? subtitleColor;
 
   const ActionCardItemListViewModel({
+    required this.id,
     required this.style,
     required this.title,
     required this.type,
@@ -26,4 +28,3 @@ class ActionCardItemListViewModel {
     this.subtitleColor,
   });
 }
-

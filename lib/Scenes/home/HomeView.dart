@@ -99,9 +99,10 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = items[index];
+                          final id = item['id'] as int? ?? index;
                           final title = item['title'] as String? ?? '';
                           final type = item['list_type'] as String? ?? '';
-                          return cardItemList(title: title, type: type, delegate: this);
+                          return cardItemList(id: id, title: title, type: type, delegate: this);
                         },
                       );
                     },
@@ -147,7 +148,7 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
 
   @override
   void onTap(ActionCardItemListViewModel viewModel) {
-    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type);
+    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type, IdList: viewModel.id);
   }
 
   @override

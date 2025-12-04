@@ -6,6 +6,7 @@ enum ActionCardItemInListStyle {
 }
 
 class ActionCardItemInListViewModel {
+  final int id;
   final ActionCardItemInListStyle style;
   final String title;
   final int? quantity;
@@ -21,6 +22,7 @@ class ActionCardItemInListViewModel {
   final IconData? deleteIcon;
 
   const ActionCardItemInListViewModel({
+    required this.id,
     required this.style,
     required this.title,
     this.quantity,
@@ -36,4 +38,3 @@ class ActionCardItemInListViewModel {
     this.deleteIcon,
   });
 }
-

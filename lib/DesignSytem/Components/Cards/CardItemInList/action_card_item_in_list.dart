@@ -47,11 +47,6 @@ class ActionCardItemInList extends StatelessWidget {
         : textDisabled;
   }
 
-  Color _getValueColor() {
-    if (viewModel.valueColor != null) return viewModel.valueColor!;
-    return textSecondary;
-  }
-
   @override
   Widget build(BuildContext context) {
     final double minHeight = viewModel.height;
@@ -71,9 +66,7 @@ class ActionCardItemInList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ============================
-              //   LINHA SUPERIOR (Nome + Valor)
-              // ============================
+
               Row(
                 children: [
                   Expanded(
@@ -115,9 +108,6 @@ class ActionCardItemInList extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              // ============================
-              //  LINHA DO MEIO (Tipo + Quantidade)
-              // ============================
               Row(
                 children: [
                   Expanded(
@@ -131,8 +121,6 @@ class ActionCardItemInList extends StatelessWidget {
                       ),
                     ),
                   ),
-
-      
                 ],
               ),
 

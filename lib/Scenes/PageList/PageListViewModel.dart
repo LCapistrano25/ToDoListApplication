@@ -7,6 +7,7 @@ class PageListViewModel {
   final AppCoordinator coordinator;
   final String title;
   final String type;
+  final int IdList;
 
   final ValueNotifier<LoadStatus> status = ValueNotifier(LoadStatus.idle);
   final ValueNotifier<List<Map<String, dynamic>>> items = ValueNotifier([]);
@@ -16,12 +17,13 @@ class PageListViewModel {
     required this.coordinator,
     required this.title,
     required this.type,
+    required this.IdList,
   });
 
   Future<void> loadItems() async {
     status.value = LoadStatus.loading;
     try {
-      final data = await service.fetchListItems(listTitle: title, listType: type);
+      final data = await service.fetchListItems(IdList: IdList, listType: type);
       items.value = data;
       if (data.isEmpty) {
         status.value = LoadStatus.empty;
@@ -35,25 +37,25 @@ class PageListViewModel {
 
   Future<void> addItem({required String itemTitle, int? quantity, String? value}) async {
     try {
-      await service.addItem(listTitle: title, listType: type, title: itemTitle, quantity: quantity, value: value);
+      await service.addItem(IdList: IdList, listType: type, title: itemTitle, quantity: quantity, value: value);
       await loadItems();
     } catch (_) {
       status.value = LoadStatus.error;
     }
   }
 
-  Future<void> deleteItem({required int index}) async {
+  Future<void> deleteItem({required int itemId}) async {
     try {
-      await service.deleteItem(listTitle: title, listType: type, index: index);
+      await service.deleteItem(IdList: IdList, listType: type, itemId: itemId);
       await loadItems();
     } catch (_) {
       status.value = LoadStatus.error;
     }
   }
 
-  Future<void> updateItem({required int index, required String itemTitle, int? quantity, String? value}) async {
+  Future<void> updateItem({required int itemId, required String itemTitle, int? quantity, String? value}) async {
     try {
-      await service.updateItem(listTitle: title, listType: type, index: index, title: itemTitle, quantity: quantity, value: value);
+      await service.updateItem(IdList: IdList, listType: type, itemId: itemId, title: itemTitle, quantity: quantity, value: value);
       await loadItems();
     } catch (_) {
       status.value = LoadStatus.error;

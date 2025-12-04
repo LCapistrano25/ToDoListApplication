@@ -11,12 +11,6 @@ import 'package:arc_to_do_list/Scenes/PageList/Components/LoadPageListView.dart'
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/FloatingButton/action_floating_button.dart';
 import 'package:arc_to_do_list/DesignSytem/Components/Buttons/FloatingButton/action_floating_button_view_model.dart';
 import 'package:arc_to_do_list/Scenes/Home/Components/FloatingButtonHomeView.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Buttons/ElevateButton/action_button_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/DropDown/action_dropdown_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Components/Inputs/action_input_view_model.dart';
-import 'package:arc_to_do_list/DesignSytem/Shared/colors.dart';
-  import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item.dart';
-  import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_card_add_item_view_model.dart';
 import 'package:arc_to_do_list/Scenes/PageList/Components/ItemDialogsPageListView.dart';
 
 class PageListView extends StatefulWidget {
@@ -92,11 +86,13 @@ class _PageListViewState extends State<PageListView>
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = items[index];
+                          final id = item['id'] as int? ?? index;
                           final title = item['title'] as String? ?? '';
                           final type = item['type'] as String? ?? '';
                           final quantity = item['quantity'] as int?;
                           final value = item['value'] as String?;
                           final vm = ActionCardItemInListViewModel(
+                            id: id,
                             style: ActionCardItemInListStyle.primary,
                             title: title,
                             type: type,
@@ -134,21 +130,11 @@ class _PageListViewState extends State<PageListView>
   }
 
   void _performDeleteByViewModel(ActionCardItemInListViewModel viewModel) {
-    final items = widget.viewModel.items.value;
-    final idx = items.indexWhere((e) =>
-        (e['title'] as String? ?? '') == viewModel.title &&
-        (e['type'] as String? ?? '') == viewModel.type);
-    if (idx >= 0) {
-      widget.viewModel.deleteItem(index: idx);
-    }
+    widget.viewModel.deleteItem(itemId: viewModel.id);
   }
 
   void _performEditByViewModel(ActionCardItemInListViewModel viewModel) {
-    final items = widget.viewModel.items.value;
-    final idx = items.indexWhere((e) =>
-        (e['title'] as String? ?? '') == viewModel.title &&
-        (e['type'] as String? ?? '') == viewModel.type);
-    showEditItemDialog(context, widget.viewModel, index: idx, currentTitle: viewModel.title, currentQuantity: viewModel.quantity, currentValue: viewModel.value);
+    showEditItemDialog(context, widget.viewModel, itemId: viewModel.id, currentTitle: viewModel.title, currentQuantity: viewModel.quantity, currentValue: viewModel.value);
   }
 
   @override
