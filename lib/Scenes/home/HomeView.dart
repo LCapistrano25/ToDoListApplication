@@ -19,6 +19,7 @@ import 'package:arc_to_do_list/Scenes/Home/Components/SidebarHomeView.dart';
 import 'package:arc_to_do_list/Scenes/Home/HomeViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:arc_to_do_list/models/list_summary.dart';
+import 'package:arc_to_do_list/models/list_type.dart';
 
 enum HomeViewIndex {
   items,
@@ -149,7 +150,17 @@ implements ActionIconButtonDelegate, ActionSidebarDelegate, ActionFloatingButton
 
   @override
   void onTap(ActionCardItemListViewModel viewModel) {
-    widget.viewModel.coordinator.goToPageList(title: viewModel.title, type: viewModel.type, idList: viewModel.id);
+    final types = widget.viewModel.typeList.value;
+    final match = types.firstWhere(
+      (t) => t.type == viewModel.type,
+      orElse: () => ListType(type: viewModel.type, isCurrency: false),
+    );
+    widget.viewModel.coordinator.goToPageList(
+      title: viewModel.title,
+      type: viewModel.type,
+      idList: viewModel.id,
+      isCurrency: match.isCurrency,
+    );
   }
 
   @override

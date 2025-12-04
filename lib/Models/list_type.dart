@@ -7,7 +7,7 @@ class ListType {
   factory ListType.fromJson(Map<String, dynamic> json) {
     return ListType(
       type: json['type'] as String,
-      isCurrency: json['isCurrency'] as bool,
+      isCurrency: (json['isCurrency'] as bool?) ?? false,
     );
   }
 

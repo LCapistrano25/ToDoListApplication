@@ -9,6 +9,7 @@ class PageListViewModel {
   final String title;
   final String type;
   final int idList;
+  final bool isCurrency;
 
   final ValueNotifier<LoadStatus> status = ValueNotifier(LoadStatus.idle);
   final ValueNotifier<List<PageListItem>> items = ValueNotifier([]);
@@ -19,6 +20,7 @@ class PageListViewModel {
     required this.title,
     required this.type,
     required this.idList,
+    required this.isCurrency,
   });
 
   Future<void> loadItems() async {

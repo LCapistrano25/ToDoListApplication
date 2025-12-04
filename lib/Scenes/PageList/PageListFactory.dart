@@ -10,6 +10,7 @@ class PageListFactory {
     required String title,
     required String type,
     required int idList,
+    required bool isCurrency,
   }) {
     return PageListView(
       viewModel: PageListViewModel(
@@ -18,6 +19,7 @@ class PageListFactory {
         title: title,
         type: type,
         idList: idList,
+        isCurrency: isCurrency,
       ),
     );
   }

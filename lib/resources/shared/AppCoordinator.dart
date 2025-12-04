@@ -25,8 +25,8 @@ class AppCoordinator {
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => login));
   }
 
-  void goToPageList({required String title, required String type, required int idList}) {
-    final page = PageListFactory.make(coordinator: this, title: title, type: type, idList: idList);
+  void goToPageList({required String title, required String type, required int idList, required bool isCurrency}) {
+    final page = PageListFactory.make(coordinator: this, title: title, type: type, idList: idList, isCurrency: isCurrency);
     navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => page));
   }
 }

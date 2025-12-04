@@ -9,9 +9,11 @@ import 'package:arc_to_do_list/DesignSytem/Components/Cards/CardAddItem/action_c
 import 'package:arc_to_do_list/Scenes/PageList/PageListViewModel.dart';
 
 void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
+
   final nameController = TextEditingController();
   final quantityController = TextEditingController();
   final valueController = TextEditingController();
+  final descriptionController = TextEditingController();
   final nameVM = ActionInputViewModel(
     style: ActionInputStyle.primary,
     labelText: 'Nome item',
@@ -46,27 +48,42 @@ void showAddItemDialog(BuildContext context, PageListViewModel viewModel) {
     borderColor: textDisabled,
     borderSize: 0.5,
   );
+  final descriptionVM = ActionInputViewModel(
+    style: ActionInputStyle.primary,
+    labelText: 'Descrição',
+    controller: descriptionController,
+    borderColor: textDisabled,
+    borderSize: 0.5,
+  );
   final addBtnVM = ActionButtonViewModel(
     size: ActionButtonSize.medium,
     style: ActionButtonStyle.primary,
     text: 'Adicionar',
     textColor: brandWhite,
   );
+  final bool isCurrency = viewModel.isCurrency;
   final cardVM = ActionCardAddItemViewModel(
     style: ActionCardAddItemStyle.primary,
     nameInput: nameVM,
     quantityInput: quantityVM,
     typeDropdown: typeVM,
     valueInput: valueVM,
+    descriptionInput: isCurrency ? null : descriptionVM,
+    isCurrency: isCurrency,
     addButton: addBtnVM,
     onAddPressed: () {
       final title = nameController.text.trim();
-      final quantityText = quantityController.text.trim();
-      final value = valueController.text.trim();
-      final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
       if (title.isEmpty) return;
-      final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
-      viewModel.addItem(itemTitle: title, quantity: qty, value: normalized);
+      if (isCurrency) {
+        final quantityText = quantityController.text.trim();
+        final value = valueController.text.trim();
+        final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
+        viewModel.addItem(itemTitle: title, quantity: qty, value: normalized);
+      } else {
+        final description = descriptionController.text.trim();
+        viewModel.addItem(itemTitle: title, quantity: null, value: description.isEmpty ? null : description);
+      }
       Navigator.of(context).pop();
     },
   );
@@ -91,9 +108,11 @@ void showEditItemDialog(
   int? currentQuantity,
   String? currentValue,
 }) {
+
   final nameController = TextEditingController(text: currentTitle);
   final quantityController = TextEditingController(text: currentQuantity?.toString() ?? '');
   final valueController = TextEditingController(text: currentValue ?? '');
+  final descriptionController = TextEditingController(text: currentValue ?? '');
   final nameVM = ActionInputViewModel(
     style: ActionInputStyle.primary,
     labelText: 'Nome item',
@@ -128,27 +147,43 @@ void showEditItemDialog(
     borderColor: textDisabled,
     borderSize: 0.5,
   );
+  final descriptionVM = ActionInputViewModel(
+    style: ActionInputStyle.primary,
+    labelText: 'Descrição',
+    controller: descriptionController,
+    borderColor: textDisabled,
+    borderSize: 0.5,
+  );
   final saveBtnVM = ActionButtonViewModel(
     size: ActionButtonSize.medium,
     style: ActionButtonStyle.primary,
     text: 'Salvar',
     textColor: brandWhite,
   );
+  final bool isCurrency = viewModel.isCurrency;
   final cardVM = ActionCardAddItemViewModel(
     style: ActionCardAddItemStyle.primary,
+    title: 'Editar item',
     nameInput: nameVM,
     quantityInput: quantityVM,
     typeDropdown: typeVM,
     valueInput: valueVM,
+    descriptionInput: isCurrency ? null : descriptionVM,
+    isCurrency: isCurrency,
     addButton: saveBtnVM,
     onAddPressed: () {
       final title = nameController.text.trim();
-      final quantityText = quantityController.text.trim();
-      final value = valueController.text.trim();
-      final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
       if (title.isEmpty) return;
-      final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
-      viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: normalized);
+      if (isCurrency) {
+        final quantityText = quantityController.text.trim();
+        final value = valueController.text.trim();
+        final normalized = value.isEmpty ? null : CurrencyBRLInputFormatter.normalizeToDecimal(value);
+        final qty = quantityText.isEmpty ? null : int.tryParse(quantityText);
+        viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: qty, value: normalized);
+      } else {
+        final description = descriptionController.text.trim();
+        viewModel.updateItem(itemId: itemId, itemTitle: title, quantity: null, value: description.isEmpty ? null : description);
+      }
       Navigator.of(context).pop();
     },
   );

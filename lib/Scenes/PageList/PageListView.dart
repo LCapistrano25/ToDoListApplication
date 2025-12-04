@@ -95,7 +95,9 @@ class _PageListViewState extends State<PageListView>
                           final value = item.value;
                           final formattedValue = value == null || value.isEmpty
                               ? null
-                              : CurrencyBRLInputFormatter.formatFromText(value);
+                              : (widget.viewModel.isCurrency
+                                  ? CurrencyBRLInputFormatter.formatFromText(value)
+                                  : value);
                           final vm = ActionCardItemInListViewModel(
                             id: id,
                             style: ActionCardItemInListStyle.primary,

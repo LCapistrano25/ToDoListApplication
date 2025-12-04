@@ -7,19 +7,25 @@ enum ActionCardAddItemStyle { primary, secondary }
 
 class ActionCardAddItemViewModel {
   final ActionCardAddItemStyle style;
+  final String? title;
   final ActionInputViewModel nameInput;
   final ActionInputViewModel quantityInput;
   final ActionDropdownViewModel<String> typeDropdown;
   final ActionInputViewModel valueInput;
+  final ActionInputViewModel? descriptionInput;
+  final bool isCurrency;
   final ActionButtonViewModel addButton;
   final VoidCallback? onAddPressed;
 
   ActionCardAddItemViewModel({
     required this.style,
+    this.title,
     required this.nameInput,
     required this.quantityInput,
     required this.typeDropdown,
     required this.valueInput,
+    this.descriptionInput,
+    this.isCurrency = true,
     required this.addButton,
     this.onAddPressed,
   });

@@ -9,9 +9,9 @@ class HomeService {
   ];
 
   final List<Map<String, dynamic>> _types = const [
-    {'type': 'Mercado'},
-    {'type': 'Tarefas'},
-    {'type': 'Construção'},
+    {'type': 'Mercado', 'isCurrency': true},
+    {'type': 'Tarefas', 'isCurrency': false},
+    {'type': 'Construção', 'isCurrency': true},
   ];
 
   Future<List<ListSummary>> fetchItemList() async {

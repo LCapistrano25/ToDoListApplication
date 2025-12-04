@@ -39,7 +39,7 @@ class ActionCardAddItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Adicionar item',
+            viewModel.title ?? 'Adicionar item',
             style: TextStyle(
               color: Colors.black,
               fontSize: 24,
@@ -56,11 +56,16 @@ class ActionCardAddItem extends StatelessWidget {
               children: [
                 ActionInput.instantiate(viewModel: viewModel.nameInput),
                 const SizedBox(height: 15),
-                ActionInput.instantiate(viewModel: viewModel.quantityInput),
-                const SizedBox(height: 15),
+                if (viewModel.isCurrency) ...[
+                  ActionInput.instantiate(viewModel: viewModel.quantityInput),
+                  const SizedBox(height: 15),
+                ],
                 ActionDropdown.instantiate(viewModel: viewModel.typeDropdown),
                 const SizedBox(height: 15),
-                ActionInput.instantiate(viewModel: viewModel.valueInput),
+                if (viewModel.isCurrency)
+                  ActionInput.instantiate(viewModel: viewModel.valueInput)
+                else if (viewModel.descriptionInput != null)
+                  ActionInput.instantiate(viewModel: viewModel.descriptionInput!),
               ],
             ),
           ),
